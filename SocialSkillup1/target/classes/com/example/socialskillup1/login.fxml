@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="463.0" prefWidth="250.0" spacing="20.0" style="-fx-background-color: black;" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.MainController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <children>
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="27.0" layoutY="23.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@../../../logo.jpg" />
+                </image>
+            </ImageView>
+        </children>
+    </AnchorPane>
+    <Label text="Username" textFill="WHITE" />
+    <TextField fx:id="userTextBox" />
+    <Label text="Password" textFill="WHITE" />
+    <PasswordField />
+    <AnchorPane prefHeight="66.0" prefWidth="330.0">
+        <children>
+            <Button alignment="CENTER" layoutX="2.0" layoutY="2.0" onAction="#switchToSignup" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: BLACK; -fx-border-color: WHITE; -fx-border-radius: 2.0;" text="Sign Up!" textAlignment="RIGHT" textFill="WHITE" />
+            <Button alignment="CENTER" layoutX="117.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: black; -fx-border-color: white; -fx-border-radius: 2.0;" text="Login" textAlignment="RIGHT" textFill="WHITE" />
+            <Button layoutX="53.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: black;" text="Forgot Password" textFill="WHITE" />
+        </children>
+    </AnchorPane>
+</VBox>
