@@ -49,7 +49,6 @@ public class MainController {
     public void checkLogin(ActionEvent e) throws IOException {
         String username = userLoginTextBox.getText();
         String password = parolaLoginTextBox.getText();
-
         String query = "SELECT * FROM Conturi WHERE Username = ? AND Parola = ?";
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
              PreparedStatement pst = conn.prepareStatement(query)) {
