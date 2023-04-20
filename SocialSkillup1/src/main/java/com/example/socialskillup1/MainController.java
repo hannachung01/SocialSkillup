@@ -83,7 +83,6 @@ public class MainController {
             msg.setVisible(true);
             return false;
         }
-
         else if (pw1.length() < 4)
         {
             msg.setText("Password is too short.");
