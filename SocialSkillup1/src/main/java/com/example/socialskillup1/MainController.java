@@ -73,6 +73,7 @@ public class MainController {
         }
     }
 
+
     public boolean checkPassword(String pw1, String pw2)
     {
         if (!pw1.equals(pw2))
