@@ -46,6 +46,7 @@ public class MainController {
         stage.setScene(scene);
         stage.show();
     }
+
     public void checkLogin(ActionEvent e) throws IOException {
         String username = userLoginTextBox.getText();
         String password = parolaLoginTextBox.getText();
