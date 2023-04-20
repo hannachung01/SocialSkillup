@@ -37,7 +37,6 @@ public class MainController {
         stage.setScene(scene);
         stage.show();
     }
-
     public void switchToLogin(ActionEvent e) throws IOException
     {
         FXMLLoader login = new FXMLLoader(Main.class.getResource("login.fxml"));
