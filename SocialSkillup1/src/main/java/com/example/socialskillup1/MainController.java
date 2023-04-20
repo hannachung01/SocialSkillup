@@ -25,9 +25,9 @@ public class MainController {
     @FXML
     private PasswordField pwTextBox, pw2TextBox;
     @FXML
-    private Label msg;
+    private Label msg, msg2;
     @FXML
-    private TextField userLoginTextBox;
+    private TextField userLoginTextBox, parolaLoginTextBox;
 
     public void switchToSignup(ActionEvent e) throws IOException
     {
@@ -46,16 +46,32 @@ public class MainController {
         stage.setScene(scene);
         stage.show();
     }
-    public void checkLogin(ActionEvent e) throws IOException
-    {
+    public void checkLogin(ActionEvent e) throws IOException {
+        String username = userLoginTextBox.getText();
+        String password = parolaLoginTextBox.getText();
 
-        /* Aici o sa redirectioneze la pagina maincont unde sa avem cont loghat.
-        FXMLLoader login = new FXMLLoader(Main.class.getResource("maincont.fxml"));
-        scene = new Scene(login.load());
-        stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();*/
-
+        String query = "SELECT * FROM Conturi WHERE Username = ? AND Parola = ?";
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+             PreparedStatement pst = conn.prepareStatement(query)) {
+            pst.setString(1, username);
+            pst.setString(2, password);
+            ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                // Username and password match
+                // Aici o sa redirectioneze la pagina maincont unde sa avem cont loghat.
+                FXMLLoader login = new FXMLLoader(Main.class.getResource("maincont.fxml"));
+                scene = new Scene(login.load());
+                stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                msg.setText("Username and password do not match");
+                msg.setTextFill(Color.RED);
+                msg.setVisible(true);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public boolean checkPassword(String pw1, String pw2)
@@ -67,7 +83,14 @@ public class MainController {
             msg.setVisible(true);
             return false;
         }
-        //code else if to check password is at least 4 characters or any other verification you want.
+
+        else if (pw1.length() < 4)
+        {
+            msg.setText("Password is too short.");
+            msg.setTextFill(Color.RED);
+            msg.setVisible(true);
+            return false;
+        }
         return true;
     }
 
@@ -78,18 +101,20 @@ public class MainController {
         String query = "SELECT * FROM Conturi WHERE Username=?";
         conn = DriverManager.getConnection("jdbc:sqlite:conturi.db"); //trebuie sa pune jdbc:sqlite: in fata de path
         String username = userTextBox.getText().toString();
+        String name = nameTextBox.getText().toString();
+        String email = emailTextBox.getText().toString();
         PreparedStatement pst = conn.prepareStatement(query);
         pst.setString(1, username);
-        ResultSet rezultate =pst.executeQuery();
+        ResultSet rezultate = pst.executeQuery();
         String pw = pwTextBox.getText().toString();
         String pw2 = pw2TextBox.getText().toString();
-        if (rezultate.next() == true)
+        if (rezultate.next())
         {
             msg.setText("Username is already in use.");
             msg.setTextFill(Color.RED);
             msg.setVisible(true);
         }
-        else if (userTextBox.getText().toString() == null || nameTextBox.getText().toString() == null || emailTextBox.getText().toString() == null)
+        else if (username.length() == 0 || name.length() == 0 || email.length() == 0)
         {
             msg.setText("Please fill in all the fields.");
             msg.setTextFill(Color.RED);

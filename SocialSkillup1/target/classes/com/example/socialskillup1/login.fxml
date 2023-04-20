@@ -19,13 +19,14 @@
         </children>
     </AnchorPane>
     <Label text="Username" textFill="WHITE" />
-    <TextField fx:id="userTextBox" />
+    <TextField fx:id="userLoginTextBox" />
     <Label text="Password" textFill="WHITE" />
-    <PasswordField />
+    <PasswordField fx:id="parolaLoginTextBox" onAction="#checkLogin" />
     <AnchorPane prefHeight="66.0" prefWidth="330.0">
         <children>
+            <Label fx:id="msg" alignment="TOP_CENTER" layoutX="-1.0" layoutY="39.0" minWidth="-Infinity" prefHeight="28.0" prefWidth="200.0" text="Message" textAlignment="CENTER" />
             <Button alignment="CENTER" layoutX="2.0" layoutY="2.0" onAction="#switchToSignup" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: BLACK; -fx-border-color: WHITE; -fx-border-radius: 2.0;" text="Sign Up!" textAlignment="RIGHT" textFill="WHITE" />
-            <Button alignment="CENTER" layoutX="117.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: black; -fx-border-color: white; -fx-border-radius: 2.0;" text="Login" textAlignment="RIGHT" textFill="WHITE" />
+            <Button alignment="CENTER" layoutX="117.0" layoutY="2.0" mnemonicParsing="false" onAction="#checkLogin" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: black; -fx-border-color: white; -fx-border-radius: 2.0;" text="Login" textAlignment="RIGHT" textFill="WHITE" />
             <Button layoutX="53.0" layoutY="41.0" mnemonicParsing="false" style="-fx-background-color: black;" text="Forgot Password" textFill="WHITE" />
         </children>
     </AnchorPane>
