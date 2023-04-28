@@ -58,18 +58,21 @@ public class MainController {
                 // Username and password match
                 // Aici o sa redirectioneze la pagina maincont unde sa avem cont loghat.
                 // Descarca datele pentru utilizator...
+                /*
                 int userID = rs.getInt("IDUtilizator");
                 String un = rs.getString("Username");
                 String nume = rs.getString("Nume");
                 int nivel = rs.getInt("Nivel");
                 String poza = rs.getString("Poza");
-                Cont contCurent = new Cont(userID, un, nume, nivel, poza);
+                Cont contCurent = new Cont(userID, un, nume, nivel, poza);*/
+                Cont contCurent = new Cont(rs);
                 FXMLLoader login = new FXMLLoader(Main.class.getResource("maincont.fxml"));;
                 //ca sa trimita un obiect mai departe la celalalt controller
-                MainContController mcc = login.getController();
-                System.out.println(mcc);
-                mcc.setContCurent(contCurent);
                 scene = new Scene(login.load());
+                MainContController mcc = login.getController();
+                System.out.println(contCurent);
+                mcc.setContCurent(contCurent);
+                mcc.updateInfo();
                 stage = (Stage)((Node)e.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();

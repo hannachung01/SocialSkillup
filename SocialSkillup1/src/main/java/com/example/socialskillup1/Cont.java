@@ -1,4 +1,6 @@
 package com.example.socialskillup1;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Cont {
@@ -19,6 +21,14 @@ public class Cont {
         this.username = username;
         this.nivel = nivel;
         this.pozaPath = pozaPath;
+    }
+
+    public Cont(ResultSet rs) throws SQLException {
+        this.IDUtilizator = rs.getInt("IDUtilizator");
+        this.username = rs.getString("Username");
+        this.name = rs.getString("Nume");
+        this.nivel = rs.getInt("Nivel");
+        this.pozaPath = rs.getString("Poza");
     }
 
     public int getIDUtilizator() {

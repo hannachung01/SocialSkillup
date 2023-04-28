@@ -15,6 +15,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class MainContController {
     @FXML
@@ -50,14 +51,17 @@ public class MainContController {
 
     //Special method called when the controller is loaded
     public void initialize() {
-        //aici o sa punem numele utilizatorului
+        //nu putem sa incarcam numele utilizatorului inca, pentru ca inca nu pot sa fac pass de datele, am creat updateInfo()
 
+    }
+    public void updateInfo() {
         String username = contCurent.getUsername();
         setUsername(username);
-        Image pozaprofil = new Image(contCurent.getPozaPath());
+        Image pozaprofil = new Image("profil1.png");
         getPozaprofil().setImage(pozaprofil);
         getLevelLabel().setText(String.valueOf(contCurent.getNivel()));
     }
+
     @FXML
     private void addGroupToList() {
         //va trebui sa salvam grupurile
