@@ -39,10 +39,8 @@ public class Main extends Application {
         FXMLLoader fl2 = new FXMLLoader(Main.class.getResource("login.fxml"));;
         Scene scene2 = new Scene(fl2.load(), 320, 500);
         pauza.setOnFinished(event -> {
-            stage.hide();
             stage.setTitle("Login");
             stage.setScene(scene2);
-            stage.show();
         });
     }
 }
