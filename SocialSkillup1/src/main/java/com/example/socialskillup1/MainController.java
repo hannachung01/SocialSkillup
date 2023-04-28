@@ -3,8 +3,6 @@ package com.example.socialskillup1;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Region;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
@@ -12,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import javafx.scene.paint.Color;
 
@@ -58,7 +57,18 @@ public class MainController {
             if (rs.next()) {
                 // Username and password match
                 // Aici o sa redirectioneze la pagina maincont unde sa avem cont loghat.
-                FXMLLoader login = new FXMLLoader(Main.class.getResource("maincont.fxml"));
+                // Descarca datele pentru utilizator...
+                int userID = rs.getInt("IDUtilizator");
+                String un = rs.getString("Username");
+                String nume = rs.getString("Nume");
+                int nivel = rs.getInt("Nivel");
+                String poza = rs.getString("Poza");
+                Cont contCurent = new Cont(userID, un, nume, nivel, poza);
+                FXMLLoader login = new FXMLLoader(Main.class.getResource("maincont.fxml"));;
+                //ca sa trimita un obiect mai departe la celalalt controller
+                MainContController mcc = login.getController();
+                System.out.println(mcc);
+                mcc.setContCurent(contCurent);
                 scene = new Scene(login.load());
                 stage = (Stage)((Node)e.getSource()).getScene().getWindow();
                 stage.setScene(scene);
@@ -121,12 +131,14 @@ public class MainController {
         }
         else if (checkPassword(pw, pw2))
         {
-            String update = "INSERT INTO Conturi(Username, Nume, Parola, Email) VALUES(?, ?, ?, ?)";
+            String update = "INSERT INTO Conturi(Username, Nume, Parola, Email, Nivel, Poza) VALUES(?, ?, ?, ?, ?, ?)";
             pst = conn.prepareStatement(update);
             pst.setString(1, username);
             pst.setString(2, nameTextBox.getText().toString());
             pst.setString(3, pwTextBox.getText().toString());
             pst.setString(4, emailTextBox.getText().toString());
+            pst.setInt(5, 1);
+            pst.setString(6, "profil1.png");
             pst.executeUpdate();
             msg.setText("Account created.");
             msg.setTextFill(Color.GREEN);

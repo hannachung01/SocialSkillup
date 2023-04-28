@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -23,15 +25,38 @@ public class MainContController {
     @FXML
     private Label usernameLabel, levelLabel;
 
+    @FXML
+    private ImageView pozaprofil;
+
     public void setUsername(String username) {
         usernameLabel.setText(username);
     }
 
+    //ca sa aiba acces la contCurent de la login
+    private Cont contCurent;
+    public void setContCurent(Cont contCurent)
+    {
+        this.contCurent = contCurent;
+    }
+
+    public Label getLevelLabel() {
+        return levelLabel;
+    }
+
+    public ImageView getPozaprofil() {
+        return pozaprofil;
+    }
+
+
     //Special method called when the controller is loaded
     public void initialize() {
         //aici o sa punem numele utilizatorului
-        String username = "Name";
+
+        String username = contCurent.getUsername();
         setUsername(username);
+        Image pozaprofil = new Image(contCurent.getPozaPath());
+        getPozaprofil().setImage(pozaprofil);
+        getLevelLabel().setText(String.valueOf(contCurent.getNivel()));
     }
     @FXML
     private void addGroupToList() {
