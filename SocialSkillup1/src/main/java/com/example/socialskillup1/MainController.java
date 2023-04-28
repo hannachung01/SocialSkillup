@@ -64,7 +64,7 @@ public class MainController {
                 stage.setScene(scene);
                 stage.show();
             } else {
-                msg.setText("Username and password do not match");
+                msg.setText("Username/password do not match");
                 msg.setTextFill(Color.RED);
                 msg.setVisible(true);
             }
