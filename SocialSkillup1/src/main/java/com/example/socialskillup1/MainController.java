@@ -12,17 +12,7 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
-import java.util.Properties;
-import java.util.Random;
-
 import javafx.scene.paint.Color;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 public class MainController {
 
@@ -161,80 +151,4 @@ public class MainController {
         pst.close();
        conn.close();
     }
-
-    public class PasswordGenerator {
-        private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        private static final Random random = new Random();
-
-        public static String generateRandomPassword(int length) {
-            StringBuilder password = new StringBuilder(length);
-            for (int i = 0; i < length; i++) {
-                password.append(CHARACTERS.charAt(random.nextInt(CHARACTERS.length())));
-            }
-            return password.toString();
-        }
-    }
-    @FXML
-    private void handleForgotPassword() {
-        String usernameOrEmail = userLoginTextBox.getText().trim();
-        if (usernameOrEmail.isEmpty()) {
-            msg.setText("Username or Email required");
-            msg.setTextFill(Color.RED);
-            msg.setVisible(true);
-            return;
-        }
-
-        // Query the database for the provided username or email
-        String query = "SELECT * FROM Conturi WHERE Username = ? OR Email = ?";
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
-             PreparedStatement pst = conn.prepareStatement(query)) {
-            pst.setString(1, usernameOrEmail);
-            pst.setString(2, usernameOrEmail);
-            ResultSet result = pst.executeQuery();
-            if (result.next()) {
-                String email = result.getString("Email");
-                //Generate a new random password for the user
-                String newPwd = PasswordGenerator.generateRandomPassword(5);
-
-                // Update the password in the db.
-                String updateQuery = "UPDATE Conturi SET Parola = ? WHERE Email = ?";
-                try (PreparedStatement updateStmt = conn.prepareStatement(updateQuery)) {
-                    updateStmt.setString(1, newPwd);
-                    updateStmt.setString(2, email);
-                    updateStmt.executeUpdate();
-                }
-                // Send email to user
-                sendEmail(email, "Password Reset " + newPwd, "Your new password is: " + newPwd);
-            } else {
-                msg.setText("Username or Email is invalid");
-                msg.setTextFill(Color.RED);
-                msg.setVisible(true);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
-
-    private void sendEmail(String to, String subject, String body) {
-        String from = "socialskillup@gmail.com";
-        String host = "localhost";
-        Properties properties = System.getProperties();
-        properties.setProperty("mail.smtp.host", host);
-        Session session = Session.getDefaultInstance(properties);
-
-        try {
-            MimeMessage message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(from));
-            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-            message.setSubject(subject);
-            message.setText(body);
-            Transport.send(message);
-            msg.setText("Email sent");
-            msg.setTextFill(Color.GREEN);
-            msg.setVisible(true);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
-
 }

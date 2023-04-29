@@ -30,8 +30,6 @@
 
     <Label fx:id="levelLabel" text="Level: " />
 
-    <Label text="Groups:" />
-
     <VBox prefHeight="200" prefWidth="280">
       <Accordion>
         <panes>
@@ -62,6 +60,15 @@
                      </children></AnchorPane>
             </content>
           </TitledPane>
+            <TitledPane animated="false" text="Conversations">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="conversatieList" prefHeight="82.0" prefWidth="320.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </TitledPane>
         </panes>
       </Accordion>
 
@@ -71,7 +78,7 @@
         </HBox>
     </VBox>
 
-          <HBox alignment="CENTER">
+                <HBox alignment="CENTER">
         <Button text="How To" />
         <Button text="Messages" />
         <MenuButton text="Settings">

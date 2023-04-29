@@ -24,6 +24,9 @@ public class MainContController {
     private ListView<String> groupList;
     @FXML
     private ListView<String> prietenList;
+
+    @FXML
+    private ListView<String> conversatieList;
     @FXML
     private TextField newGroupField;
 
@@ -69,6 +72,8 @@ public class MainContController {
         populeazaListaGrupuri(); //folosind lista de grupuri de la utilizator, populeaza lista de grupuri pe view
         contCurent.populeazaPrieteni();
         populeazaListaPrieteni();
+        contCurent.populeazaConversatii();
+        populeazaListaConversatii();
     }
     @FXML
     private void populeazaListaGrupuri() throws SQLException { //pune grupurile utilizatorului in ListView
@@ -88,6 +93,22 @@ public class MainContController {
         for (Cont prieten : contCurent.prieteni)
         {
             items.add(prieten.getUsername());
+        }
+    }
+
+    @FXML
+    private void populeazaListaConversatii() throws SQLException{
+        ObservableList<String> items = conversatieList.getItems();
+        contCurent.populeazaConversatii();
+        for (ConversatiePrivata conversatie : contCurent.conversatii)
+        {
+            String participanti = "";
+            for (Cont participant : conversatie.participanti)
+            {
+                if (participant.getIDUtilizator()!=contCurent.getIDUtilizator())
+                    participanti += participant.getUsername();
+            }
+            items.add(participanti);
         }
     }
 

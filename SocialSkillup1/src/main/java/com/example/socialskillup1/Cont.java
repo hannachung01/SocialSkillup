@@ -1,5 +1,6 @@
 package com.example.socialskillup1;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Cont {
@@ -8,12 +9,12 @@ public class Cont {
     private String username;
     private int nivel;
     String pozaPath;
+
     //implementeaza stickere mai incolo
     //implementeaza inventar mai incolo
-    //implementeaza grupuri
-    //implementeaza mesaje
     ArrayList<Cont> prieteni;
     ArrayList<MembruGrup> grupuri;
+    ArrayList<ConversatiePrivata> conversatii;
     public static Cont lookupCont(int IDUtilizator) throws SQLException
     {
         String query = "SELECT * FROM Conturi WHERE IDUtilizator = ?";
@@ -28,7 +29,6 @@ public class Cont {
         }
         else return null;
     }
-
     public Cont(int IDUtilizator, String name, String username, int nivel, String pozaPath) {
         this.IDUtilizator = IDUtilizator;
         this.name = name;
@@ -117,28 +117,49 @@ public class Cont {
         while (rs.next())
         {
             int idCautat = rs.getInt("IDContAltuia");
-            Cont p = cautaContPeID(idCautat);
+            Cont p = lookupCont(idCautat);
             if (p != null) prieteni.add(p);
         }
     }
-    public Cont cautaContPeID(int id) throws SQLException
-    {
-        String query = "SELECT * FROM Conturi WHERE IDUtilizator = ?";
+
+    public void populeazaConversatii() throws SQLException{
+        conversatii = new ArrayList<>();
+        String query = "SELECT * FROM ConversatiiPrivateParticipanti WHERE IDParticipant = ?";
         Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
         PreparedStatement pst = conn.prepareStatement(query);
-        pst.setString(1, String.valueOf(id));
-        ResultSet rs = pst.executeQuery();
-        if (rs.next())
+        pst.setString(1, String.valueOf(IDUtilizator));
+        ResultSet rs = pst.executeQuery(); //da o lista de conversatii
+        while (rs.next()) //parcurge prin fiecare conversatie
         {
-            int idutil = rs.getInt("IDUtilizator");
-            String username = rs.getString("Username");
-            String nume = rs.getString("Nume");
-            int nivel = rs.getInt("Nivel");
-            String pozapath = rs.getString("Poza");
-            Cont r = new Cont(idutil, nume, username, nivel, pozapath);
-            return r;
+            ConversatiePrivata cp;
+            ArrayList<Cont> participanti = new ArrayList<Cont>();
+            int idconv = rs.getInt("IDConversatie");
+            String query2 = "SELECT * FROM ConversatiiPrivateParticipanti WHERE IDConversatie = ?";
+            PreparedStatement pst2 = conn.prepareStatement(query2);
+            pst2.setString(1, String.valueOf(idconv));
+            ResultSet rs2 = pst2.executeQuery();
+            while (rs2.next())
+            {
+                int IDPart = rs2.getInt("IDParticipant");
+                System.out.println("Am gasit participant "+ IDPart);
+                Cont c = lookupCont(IDPart);
+                participanti.add(c);
+            }
+            ArrayList<Mesaj> mesaje =new ArrayList<>();
+            String query3 = "SELECT * FROM MesajePrivate WHERE IDConversatie = ?";
+            PreparedStatement pst3 = conn.prepareStatement(query3);
+            pst3.setString(1, String.valueOf(idconv));
+            ResultSet rs3 = pst3.executeQuery();
+            while (rs3.next())
+            {
+                int senderID = rs3.getInt("SenderID");
+                String continut = rs3.getString("Continut");
+                LocalDateTime ts = LocalDateTime.parse(rs3.getString("Timestamp"));
+                Mesaj m = new Mesaj(1, continut, ts);
+                mesaje.add(m);
+            }
+            cp = new ConversatiePrivata(idconv, participanti, mesaje);
+            conversatii.add(cp);
         }
-        else return null;
     }
-
 }
