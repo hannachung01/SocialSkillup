@@ -1,6 +1,5 @@
 package com.example.socialskillup1;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class Cont {
@@ -14,6 +13,7 @@ public class Cont {
     //implementeaza grupuri
     //implementeaza mesaje
     ArrayList<Cont> prieteni;
+    ArrayList<MembruGrup> grupuri;
 
     public Cont(int IDUtilizator, String name, String username, int nivel, String pozaPath) {
         this.IDUtilizator = IDUtilizator;
@@ -23,12 +23,15 @@ public class Cont {
         this.pozaPath = pozaPath;
     }
 
-    public Cont(ResultSet rs) throws SQLException {
+    public Cont(ResultSet rs) throws SQLException { //resultset de la tabel Conturi
         this.IDUtilizator = rs.getInt("IDUtilizator");
         this.username = rs.getString("Username");
         this.name = rs.getString("Nume");
         this.nivel = rs.getInt("Nivel");
         this.pozaPath = rs.getString("Poza");
+    }
+
+    public Cont() {
     }
 
     public int getIDUtilizator() {
@@ -77,5 +80,31 @@ public class Cont {
 
     public void setPrieteni(ArrayList<Cont> prieteni) {
         this.prieteni = prieteni;
+    }
+    public void populeazaGrupuri() throws SQLException {
+        grupuri = new ArrayList<>();
+        String query = "SELECT * FROM MembriiGrupelor WHERE IDUtilizator = ?";
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, String.valueOf(IDUtilizator));
+        ResultSet rs = pst.executeQuery();
+        while (rs.next()) {
+            MembruGrup mem = MembruGrup.extrageMembruGrup(rs, false); //false pentru ca folosit ca parte de lista de grupuri
+            grupuri.add(mem);
+        }
+    }
+    public static Cont lookupCont(int IDUtilizator) throws SQLException
+    {
+        String query = "SELECT * FROM Conturi WHERE IDUtilizator = ?";
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, String.valueOf(IDUtilizator));
+        ResultSet rs = pst.executeQuery();
+        if (rs.next())
+        {
+            Cont c = new Cont(rs);
+            return c;
+        }
+        else return null;
     }
 }
