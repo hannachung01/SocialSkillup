@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.collections.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="CENTER" prefHeight="500" prefWidth="320" spacing="10" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.MainContController">
+
+    <ImageView fx:id="pozaprofil">
+        <image>
+            <Image url="https://via.placeholder.com/150x150" />
+        </image>
+        <fitHeight>100</fitHeight>
+        <fitWidth>100</fitWidth>
+        <preserveRatio>true</preserveRatio>
+    </ImageView>
+
+    <Label fx:id="usernameLabel" text="Username" />
+
+    <Label fx:id="levelLabel" text="Level: " />
+
+    <VBox prefHeight="200" prefWidth="280">
+      <Accordion>
+        <panes>
+          <TitledPane animated="false" text="Latest">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="Groups">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                          <ListView fx:id="groupList" layoutY="2.0" onMouseClicked="#handleGroupList" prefHeight="100.0" prefWidth="320.0">
+                              <items>
+                                  <FXCollections fx:factory="observableArrayList">
+                </FXCollections>
+                              </items>
+                          </ListView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="Friends">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="prietenList" layoutX="-3.0" prefHeight="100.0" prefWidth="328.0" />
+                     </children></AnchorPane>
+            </content>
+          </TitledPane>
+            <TitledPane animated="false" text="Conversations">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="conversatieList" prefHeight="82.0" prefWidth="320.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </TitledPane>
+        </panes>
+      </Accordion>
+
+        <HBox alignment="CENTER_LEFT" spacing="10">
+            <TextField fx:id="newGroupField" prefWidth="200" promptText="Add new group" />
+            <Button onAction="#addGroupToList" text="Add" />
+        </HBox>
+    </VBox>
+
+                <HBox alignment="CENTER">
+        <Button text="How To" />
+        <Button onAction="#laMesajView" text="Messages" />
+        <MenuButton text="Settings">
+            <items>
+                <MenuItem text="Change Password" />
+                <MenuItem text="Change Username" />
+                <MenuItem text="Change Email" />
+                <MenuItem text="Change Profile Picture" />
+                <MenuItem text="Friend List" />
+            </items>
+        </MenuButton>
+    </HBox>
+
+</VBox>
