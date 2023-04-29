@@ -1,5 +1,16 @@
 # SocialSkillup
 
-1. Am facut pagina de intrare (Irina, sa schimbi hello-view.fxml sa aiba ce animatie vrei tu), si intra dupa cateva secunde in pagina de login.
-2. Am facut pagina de signup, dar cineva sa lucreze la MainController.java, metoda public boolean checkPassword(String pw1, String pw2), sa verifice parola este ok si cu 4 caractere.
-3. Cineva sa lucreze la pagina de login ca sa verifice daca login este corect cu conturi.db.
+Vlad
+1. Fa email forgot password.
+2. Adauga/programeaza return button pentru fiecare view.
+
+Oricine termina primul...
+1. Creeaza functionalitate sa creeze mesaje.
+
+Hanna
+1. Creeaza lista de prieteni.
+
+Irina
+1. Creeaza view-uri pentru fiecare cutie in planul nostru in draw.io.
+2. Schimba cum arata view pentru MainCont si Grup sa arate mai bine.
+3. Scrie continutul pentru How To.
