@@ -14,6 +14,20 @@ public class Cont {
     //implementeaza mesaje
     ArrayList<Cont> prieteni;
     ArrayList<MembruGrup> grupuri;
+    public static Cont lookupCont(int IDUtilizator) throws SQLException
+    {
+        String query = "SELECT * FROM Conturi WHERE IDUtilizator = ?";
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, String.valueOf(IDUtilizator));
+        ResultSet rs = pst.executeQuery();
+        if (rs.next())
+        {
+            Cont c = new Cont(rs);
+            return c;
+        }
+        else return null;
+    }
 
     public Cont(int IDUtilizator, String name, String username, int nivel, String pozaPath) {
         this.IDUtilizator = IDUtilizator;
@@ -78,8 +92,7 @@ public class Cont {
         this.pozaPath = pozaPath;
     }
 
-    public void setPrieteni(ArrayList<Cont> prieteni) {
-        this.prieteni = prieteni;
+    public void adaugaPrieteni(int prietenContID) {
     }
     public void populeazaGrupuri() throws SQLException {
         grupuri = new ArrayList<>();
@@ -93,18 +106,39 @@ public class Cont {
             grupuri.add(mem);
         }
     }
-    public static Cont lookupCont(int IDUtilizator) throws SQLException
+    public void populeazaPrieteni() throws SQLException
     {
-        String query = "SELECT * FROM Conturi WHERE IDUtilizator = ?";
+        prieteni = new ArrayList<>();
+        String query = "SELECT * FROM Relatii WHERE IDContPrincipal = ? AND estePrieten = 1";
         Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
         PreparedStatement pst = conn.prepareStatement(query);
         pst.setString(1, String.valueOf(IDUtilizator));
         ResultSet rs = pst.executeQuery();
+        while (rs.next())
+        {
+            int idCautat = rs.getInt("IDContAltuia");
+            Cont p = cautaContPeID(idCautat);
+            if (p != null) prieteni.add(p);
+        }
+    }
+    public Cont cautaContPeID(int id) throws SQLException
+    {
+        String query = "SELECT * FROM Conturi WHERE IDUtilizator = ?";
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, String.valueOf(id));
+        ResultSet rs = pst.executeQuery();
         if (rs.next())
         {
-            Cont c = new Cont(rs);
-            return c;
+            int idutil = rs.getInt("IDUtilizator");
+            String username = rs.getString("Username");
+            String nume = rs.getString("Nume");
+            int nivel = rs.getInt("Nivel");
+            String pozapath = rs.getString("Poza");
+            Cont r = new Cont(idutil, nume, username, nivel, pozapath);
+            return r;
         }
         else return null;
     }
+
 }

@@ -44,7 +44,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                          <ListView fx:id="groupList" onMouseClicked="#handleGroupList" prefHeight="100.0" prefWidth="320.0">
+                          <ListView fx:id="groupList" layoutY="2.0" onMouseClicked="#handleGroupList" prefHeight="100.0" prefWidth="320.0">
                               <items>
                                   <FXCollections fx:factory="observableArrayList">
                 </FXCollections>
@@ -56,7 +56,10 @@
           </TitledPane>
           <TitledPane animated="false" text="Friends">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView fx:id="prietenList" layoutX="-3.0" prefHeight="100.0" prefWidth="328.0" />
+                     </children></AnchorPane>
             </content>
           </TitledPane>
         </panes>
@@ -68,7 +71,7 @@
         </HBox>
     </VBox>
 
-    <HBox alignment="CENTER">
+          <HBox alignment="CENTER">
         <Button text="How To" />
         <Button text="Messages" />
         <MenuButton text="Settings">

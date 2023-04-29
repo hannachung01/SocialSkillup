@@ -23,6 +23,8 @@ public class MainContController {
     @FXML
     private ListView<String> groupList;
     @FXML
+    private ListView<String> prietenList;
+    @FXML
     private TextField newGroupField;
 
     @FXML
@@ -64,18 +66,28 @@ public class MainContController {
         getPozaprofil().setImage(pozaprofil);
         getLevelLabel().setText(String.valueOf(contCurent.getNivel()));
         contCurent.populeazaGrupuri(); //populeaza lista de grupuri la care apartin utilizatorul actual in cont
-        System.out.println("Finished generating user's groups.");
         populeazaListaGrupuri(); //folosind lista de grupuri de la utilizator, populeaza lista de grupuri pe view
-        System.out.println("Added user's groups to view.");
+        contCurent.populeazaPrieteni();
+        populeazaListaPrieteni();
     }
     @FXML
-    private void populeazaListaGrupuri() throws SQLException {
+    private void populeazaListaGrupuri() throws SQLException { //pune grupurile utilizatorului in ListView
         ObservableList<String> items = groupList.getItems();
         contCurent.populeazaGrupuri();
         for (MembruGrup m : contCurent.grupuri)
         {   int idGrup = m.getIDlinkedGrup();
             Grup g = Grup.lookupGrup(idGrup);
             items.add(g.getNumeGrup());
+        }
+    }
+
+    @FXML
+    private void populeazaListaPrieteni() throws SQLException{
+        ObservableList<String> items = prietenList.getItems();
+        contCurent.populeazaPrieteni();
+        for (Cont prieten : contCurent.prieteni)
+        {
+            items.add(prieten.getUsername());
         }
     }
 
