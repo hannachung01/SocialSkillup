@@ -1,15 +1,11 @@
 # SocialSkillup
 
 Vlad
-1. Fa email forgot password.
-2. Adauga/programeaza return button pentru fiecare view.
-3. Creeaza pagina pentru utilizatorul sa schimbe user info, poza, etc. Codeaza metode sa schimbe datele si sa faca commit pe database.
-
-Oricine termina primul.
-1. Creeaza o pagina view pentru cautarea grupurilor sau a utilizatorilor.
+1. Poti sa te duci la mesajview si sa faci evenimente in care oricand dai click pe o conversatie, se muta la conversatie respectiva?
+2. Poti sa faci o pagina view pentru cautarea grupurilor sau a utilizatorilor?
 
 Hanna
-1. Creeaza functionalitate sa creeze mesaje intre utilizatori.
+1. Creeaza functionalitate pentru pagina de Grup.
 
 Irina
 1. Creeaza view-uri pentru fiecare cutie in planul nostru in draw.io.
