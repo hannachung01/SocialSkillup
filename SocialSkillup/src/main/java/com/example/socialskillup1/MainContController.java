@@ -139,7 +139,7 @@ public class MainContController {
     }
 
     @FXML
-    public void handleGroupList(MouseEvent event) throws IOException {
+    public void handleGroupList(MouseEvent event) throws IOException, SQLException {
         //temporar
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             String selectedItem = groupList.getSelectionModel().getSelectedItem();

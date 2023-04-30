@@ -11,4 +11,8 @@ public class ConversatiePrivata {
         this.participanti = participanti;
         this.mesaje = mesaje;
     }
+
+    public int getIDConversatiePrivata() {
+        return IDConversatiePrivata;
+    }
 }

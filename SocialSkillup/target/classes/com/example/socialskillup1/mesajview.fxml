@@ -41,10 +41,10 @@
     <AnchorPane prefHeight="108.0" prefWidth="320.0">
         <children>
             <Button fx:id="inapoiLaMain" layoutX="26.0" layoutY="45.0" onAction="#inapoiLaMain" prefHeight="34.0" prefWidth="62.0" text="Back" />
-            <Button fx:id="cautaCont" layoutX="224.0" layoutY="45.0" prefHeight="34.0" prefWidth="53.0" text="Find" />
+            <Button fx:id="cautaCont" layoutX="224.0" layoutY="45.0" onAction="#cautaPersoana" prefHeight="34.0" prefWidth="53.0" text="Find" />
             <TextArea fx:id="mesajCamp" layoutX="27.0" prefHeight="42.0" prefWidth="191.0" />
             <Button fx:id="trimiteMesaj" layoutX="224.0" layoutY="4.0" onAction="#adaugaMesaj" prefHeight="34.0" prefWidth="53.0" text="Send" />
-            <TextField layoutX="95.0" layoutY="45.0" prefHeight="34.0" prefWidth="123.0" />
+            <TextField fx:id="pCautat" layoutX="95.0" layoutY="45.0" prefHeight="34.0" prefWidth="123.0" />
         </children>
     </AnchorPane>
 

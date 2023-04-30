@@ -3,6 +3,7 @@ module com.example.socialskillup1 {
     requires javafx.fxml;
     requires java.sql;
     requires mail;
+    requires org.xerial.sqlitejdbc;
 
 
     opens com.example.socialskillup1 to javafx.fxml;
