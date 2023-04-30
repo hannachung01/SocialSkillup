@@ -1,43 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.collections.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Pagination?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="500" prefWidth="500" spacing="10" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.GroupController">
+<VBox alignment="CENTER" prefHeight="500" prefWidth="320" spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.GroupController">
+   <AnchorPane prefHeight="123.0" prefWidth="320.0">
+      <children>
+      
+                            <ImageView fx:id="pozaprofil" layoutX="14.0" layoutY="14.0">
+              <image>
+                  <Image url="https://via.placeholder.com/150x150" />
+              </image>
+              <fitHeight>100</fitHeight>
+              <fitWidth>100</fitWidth>
+              <preserveRatio>true</preserveRatio>
+          </ImageView>
+      
+                            <Label fx:id="groupName" layoutX="188.0" layoutY="21.0" text="Group Name" />
+         <Label fx:id="goalText" layoutX="132.0" layoutY="44.0" prefHeight="40.0" prefWidth="157.0" text="Goal:" textAlignment="CENTER" wrapText="true" />
+         <Label fx:id="deadlineText" layoutX="127.0" layoutY="85.0" prefHeight="17.0" prefWidth="150.0" text="By:" />
+      </children>
+   </AnchorPane>
+   <Label text="What's New" />
+   <Pagination maxPageIndicatorCount="3" prefHeight="121.0" prefWidth="320.0" />
 
-    <HBox spacing="10">
-        <ImageView fx:id="groupImageView" fitHeight="100" fitWidth="100" preserveRatio="true">
-            <image>
-                <Image url="https://via.placeholder.com/150x150" />
-            </image>
-        </ImageView>
-        <Label fx:id="groupNameLabel" text="Group Name" />
-    </HBox>
-
-    <Label text="Task: " />
-
-    <TextArea fx:id="taskTextArea" prefHeight="260" prefWidth="470" wrapText="true" />
-
-    <Label text="News Feed: " />
-
-    <VBox prefHeight="300" prefWidth="480">
-        <ListView fx:id="newsFeedListView" prefHeight="250" prefWidth="480">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="test1" />
-                    <String fx:value="test2" />
-                </FXCollections>
-            </items>
-        </ListView>
-
-        <Button fx:id="addNewsFeedButton" onAction="#addNewsFeedItem" text="Add News Feed Item" />
+    <VBox prefHeight="146.0" prefWidth="320.0">
+      <children>
+         <Accordion>
+           <panes>
+             <TitledPane animated="false" text="Upcoming Side Quests, Tasks &amp; Milestones">
+               <content>
+                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <ListView prefHeight="71.0" prefWidth="320.0" />
+                        </children>
+                     </AnchorPane>
+               </content>
+             </TitledPane>
+             <TitledPane animated="false" text="Members">
+               <content>
+                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <ListView fx:id="listaMembri" prefHeight="74.0" prefWidth="320.0" />
+                        </children></AnchorPane>
+               </content>
+             </TitledPane>
+             <TitledPane animated="false" prefHeight="143.0" prefWidth="320.0" text="Recent Group Posts" />
+           </panes>
+         </Accordion>
+      </children>
     </VBox>
+   <AnchorPane prefHeight="34.0" prefWidth="296.0">
+      <children>
+         <Button layoutX="112.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Social Page" />
+         <Button layoutX="214.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="25.0" prefWidth="100.0" text="Back to Me" />
+         <Button layoutX="8.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Progress Page" />
+      </children>
+   </AnchorPane>
 
-    <Button fx:id="settingsButton" onAction="#showSettings" text="Settings" />
-
-    <Button fx:id="groupChatButton" onAction="#showGroupChat" text="Group Chat" />
-    <Button fx:id="Back" onAction="#handleBack" text="Go back" />
 </VBox>

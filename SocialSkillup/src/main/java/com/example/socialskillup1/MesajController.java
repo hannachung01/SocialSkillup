@@ -1,31 +1,31 @@
-package com.example.socialskillup1;
+        package com.example.socialskillup1;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import javafx.util.Callback;
+        import javafx.collections.FXCollections;
+        import javafx.collections.ObservableList;
+        import javafx.event.ActionEvent;
+        import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Node;
+        import javafx.scene.Parent;
+        import javafx.scene.Scene;
+        import javafx.scene.control.Label;
+        import javafx.scene.control.ListCell;
+        import javafx.scene.control.ListView;
+        import javafx.scene.control.TextArea;
+        import javafx.scene.image.Image;
+        import javafx.scene.image.ImageView;
+        import javafx.scene.input.MouseButton;
+        import javafx.scene.input.MouseEvent;
+        import javafx.scene.layout.AnchorPane;
+        import javafx.scene.layout.Pane;
+        import javafx.stage.Stage;
+        import javafx.util.Callback;
 
-import java.io.IOException;
-import java.sql.*;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+        import java.io.IOException;
+        import java.sql.*;
+        import java.time.LocalDateTime;
+        import java.util.ArrayList;
+        import java.util.List;
 public class MesajController {
 
 
@@ -59,27 +59,27 @@ public class MesajController {
         Image imC = new Image(contCurent.getPozaPath());
         imageCurent.setImage(imC);
         conversatieList.setOnMouseClicked(event -> {
-                 if(event.getClickCount() ==2)
-                 {
-                     int index = conversatieList.getSelectionModel().getSelectedIndex();
-                     String nouNotificare = notificare.getText();
-                     if (index >= 0) {
-                         convCurent = contCurent.conversatii.get(index);
-                         nouNotificare = "You are chatting with ";
-                         if (convCurent.participanti.get(0).getIDUtilizator() != contCurent.getIDUtilizator())
-                         {
-                             nouNotificare = nouNotificare + convCurent.participanti.get(0).getName();
-                         }
-                         else nouNotificare = nouNotificare + convCurent.participanti.get(1).getName();
-                         Image im = new Image(convCurent.participanti.get(0).getPozaPath());
-                         imageCurent.setImage(im);
-                         Image im2 = new Image(convCurent.participanti.get(1).getPozaPath());
-                         imageAltul.setImage(im2);
-                         updateConvo();
-                         }
-                     notificare.setText(nouNotificare);
-                 }
-            }
+                    if(event.getClickCount() ==2)
+                    {
+                        int index = conversatieList.getSelectionModel().getSelectedIndex();
+                        String nouNotificare = notificare.getText();
+                        if (index >= 0) {
+                            convCurent = contCurent.conversatii.get(index);
+                            nouNotificare = "You are chatting with ";
+                            if (convCurent.participanti.get(0).getIDUtilizator() != contCurent.getIDUtilizator())
+                            {
+                                nouNotificare = nouNotificare + convCurent.participanti.get(0).getName();
+                            }
+                            else nouNotificare = nouNotificare + convCurent.participanti.get(1).getName();
+                            Image im = new Image(convCurent.participanti.get(0).getPozaPath());
+                            imageCurent.setImage(im);
+                            Image im2 = new Image(convCurent.participanti.get(1).getPozaPath());
+                            imageAltul.setImage(im2);
+                            updateConvo();
+                        }
+                        notificare.setText(nouNotificare);
+                    }
+                }
         );
     }
     public void updateConvo()
@@ -106,7 +106,7 @@ public class MesajController {
 
     @FXML
     private void populeazaListaConversatii() throws SQLException{
-    ObservableList<String> items = conversatieList.getItems();
+        ObservableList<String> items = conversatieList.getItems();
         contCurent.populeazaConversatii();
         for (ConversatiePrivata conversatie : contCurent.conversatii)
         {
@@ -132,7 +132,7 @@ public class MesajController {
             mesajDisplay.getItems().add(nouMesaj.shortString());
             mesajDisplay.scrollTo(mesajDisplay.getItems().size()-1);
             mesajCamp.clear();
-           // updateConvo();
+            // updateConvo();
             String query = "INSERT INTO MesajePrivate (IDConversatie, SenderID, Continut, Timestamp) VALUES(?,?,?,?)";
             Connection conn2 = DriverManager.getConnection("jdbc:sqlite:conturi.db");
             PreparedStatement pst = conn2.prepareStatement(query);

@@ -1,5 +1,6 @@
 package com.example.socialskillup1;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Grup {
@@ -7,14 +8,21 @@ public class Grup {
     private String numeGrup;
     private String pozaGrup;
     private String scop;
+    private String miza;
+    private int tipGrup; //0 competitiv, 1 cooperativ
+
+    private LocalDateTime panaCand;
     ArrayList<MembruGrup> membri;
     static ArrayList<Grup> toateGrupurile;
 
-    public Grup(int IDGrup, String numeGrup, String pozaGrup, String scop) throws SQLException {
+    public Grup(int IDGrup, String numeGrup, String pozaGrup, String scop, String miza, int tipGrup, LocalDateTime panaCand) throws SQLException {
         this.IDGrup = IDGrup;
         this.numeGrup = numeGrup;
         this.pozaGrup = pozaGrup;
         this.scop = scop;
+        this.miza = miza;
+        this.tipGrup = tipGrup;
+        this.panaCand = panaCand;
         populeazaMembriiLista();
     }
     public void populeazaMembriiLista() throws SQLException {
@@ -60,8 +68,11 @@ public class Grup {
             String numegrup = rs.getString("NumeGrup");
             String poza=rs.getString("PozaGrup");
             String scop=rs.getString("Scop");
+            String miza=rs.getString("Miza");
+            int tipGrup =rs.getInt("TipGrup");
+            LocalDateTime ldt = LocalDateTime.parse(rs.getString("EndDate"));
             ArrayList<MembruGrup> membri;
-            Grup g = new Grup(idgrup, numegrup, poza, scop);
+            Grup g = new Grup(idgrup, numegrup, poza, scop, miza, tipGrup, ldt);
             toateGrupurile.add(g);
         }
         rs.close();
@@ -110,4 +121,11 @@ public class Grup {
         this.scop = scop;
     }
 
+    public void setPanaCand(LocalDateTime panaCand) {
+        this.panaCand = panaCand;
+    }
+
+    public LocalDateTime getPanaCand() {
+        return panaCand;
+    }
 }

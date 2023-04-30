@@ -45,6 +45,7 @@ public class MainContController {
 
     //ca sa aiba acces la contCurent de la login
     private Cont contCurent;
+    private Grup grupCurent;
     private ArrayList<Grup> toateGrupurile;
     private Settings settingsController;
     public void setContCurent(Cont contCurent)
@@ -142,19 +143,18 @@ public class MainContController {
         //temporar
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             String selectedItem = groupList.getSelectionModel().getSelectedItem();
-            if (selectedItem != null) {
-                /*FXMLLoader loader = new FXMLLoader(getClass().getResource("group.fxml"));
-                Parent root = loader.load();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root));
-                stage.setWidth(300);
-                stage.setHeight(500);
-                stage.show();*/
-                Parent settingsParent = FXMLLoader.load(getClass().getResource("group.fxml"));
-                Scene settingsScene = new Scene(settingsParent);
-
+            if (selectedItem != null) {//trei linii sa afle ce grup este de fapt selectat pentru ca listview este doar string-uri :((
+                int i = groupList.getSelectionModel().getSelectedIndex();
+                int grupID = contCurent.grupuri.get(i).getIDlinkedGrup();
+                grupCurent = Grup.lookupGrup(grupID);
+                System.out.println(grupCurent.getNumeGrup());
+                FXMLLoader grupMain = new FXMLLoader(Main.class.getResource("group.fxml"));
+                Scene groupScene = new Scene(grupMain.load());
+                GroupController gc = grupMain.getController();
+                gc.setContGrup(contCurent, grupCurent);
+                gc.updateInfo();
                 Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-                window.setScene(settingsScene);
+                window.setScene(groupScene);
                 window.show();
             }
         }

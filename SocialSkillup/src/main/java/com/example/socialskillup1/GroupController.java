@@ -1,6 +1,10 @@
 package com.example.socialskillup1;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,25 +25,15 @@ import javafx.stage.Stage;
 
 public class GroupController {
     @FXML
-    private ImageView groupImageView;
+    private Label groupName;
     @FXML
-    private Label groupNameLabel;
+    private Label goalText;
     @FXML
-    private TextArea intentionsTextArea;
+    private Label deadlineText;
     @FXML
-    private ListView<String> newsFeedListView;
+    private ImageView pozaprofil;
     @FXML
-    private Button settingsButton;
-    @FXML
-    private Button groupChatButton;
-
-
-
-    @FXML
-    public void addNewsFeedItem() {
-        ObservableList<String> items = newsFeedListView.getItems();
-        items.add("added new item");
-    }
+    private ListView listaMembri;
 
     @FXML
     public void showSettings() {
@@ -51,6 +45,9 @@ public class GroupController {
 
     }
 
+    private Cont contCurent;
+    private Grup grupCurent;
+
     @FXML
     public void handleBack(ActionEvent event) throws IOException {
         Parent loginParent = (Parent)FXMLLoader.load(this.getClass().getResource("maincont.fxml"));
@@ -58,5 +55,45 @@ public class GroupController {
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         window.setScene(loginScene);
         window.show();
+    }
+
+    public void setContGrup(Cont cc, Grup cg)
+    {
+        contCurent = cc;
+        grupCurent = cg;
+    }
+
+    public void updateInfo()
+    {
+        groupName.setText(grupCurent.getNumeGrup());
+        String s = "Goal: " + grupCurent.getScop();
+        goalText.setText(s);
+        LocalDateTime deadline = grupCurent.getPanaCand();
+        deadlineText.setText("By: " + deadline.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        String path = grupCurent.getPozaGrup();
+        Image im = new Image(path);
+        pozaprofil.setImage(im);
+    }
+
+    public void populeazaListaMembrii() throws SQLException {
+        ObservableList<String> items = listaMembri.getItems();
+        grupCurent.populeazaMembriiLista();
+        for (MembruGrup m : grupCurent.membri) items.add(m.getName());
+    }
+
+    public void handleBack() throws IOException, SQLException {
+        FXMLLoader maincont = new FXMLLoader(Main.class.getResource("maincont.fxml"));
+        Scene groupScene = new Scene(maincont.load());
+        MainContController mcc = maincont.getController();
+        mcc.setContCurent(contCurent);
+        mcc.updateInfo();
+    }
+
+    public void toSocial() throws IOException {
+        FXMLLoader social = new FXMLLoader(Main.class.getResource("socialpage.fxml"));
+        Scene socialscene = new Scene(social.load());
+        GrupSocialController gsc = social.getController();
+        gsc.setVariables(contCurent, grupCurent);
+
     }
 }
