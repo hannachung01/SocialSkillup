@@ -32,7 +32,7 @@ public class Grup {
         PreparedStatement pst = conn.prepareStatement(query);
         pst.setString(1, String.valueOf(IDGrup));
         ResultSet rs = pst.executeQuery();
-        if (rs.next()) {
+        while (rs.next()) {
             MembruGrup mem = MembruGrup.extrageMembruGrup(rs, true);
             /*
             Cont n = new Cont(rs);

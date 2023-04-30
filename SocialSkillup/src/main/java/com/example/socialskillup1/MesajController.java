@@ -8,10 +8,7 @@
         import javafx.scene.Node;
         import javafx.scene.Parent;
         import javafx.scene.Scene;
-        import javafx.scene.control.Label;
-        import javafx.scene.control.ListCell;
-        import javafx.scene.control.ListView;
-        import javafx.scene.control.TextArea;
+        import javafx.scene.control.*;
         import javafx.scene.image.Image;
         import javafx.scene.image.ImageView;
         import javafx.scene.input.MouseButton;
@@ -19,8 +16,7 @@
         import javafx.scene.layout.AnchorPane;
         import javafx.scene.layout.Pane;
         import javafx.stage.Stage;
-        import javafx.util.Callback;
-
+        import org.sqlite.SQLiteConnection;
         import java.io.IOException;
         import java.sql.*;
         import java.time.LocalDateTime;
@@ -39,6 +35,8 @@ public class MesajController {
     private ListView<String> conversatieList;
     @FXML
     private Label notificare;
+    @FXML
+    private TextField pCautat;
     @FXML
     private TextArea mesajCamp;
     /*@FXML
@@ -65,23 +63,26 @@ public class MesajController {
                         String nouNotificare = notificare.getText();
                         if (index >= 0) {
                             convCurent = contCurent.conversatii.get(index);
-                            nouNotificare = "You are chatting with ";
-                            if (convCurent.participanti.get(0).getIDUtilizator() != contCurent.getIDUtilizator())
-                            {
-                                nouNotificare = nouNotificare + convCurent.participanti.get(0).getName();
-                            }
-                            else nouNotificare = nouNotificare + convCurent.participanti.get(1).getName();
-                            Image im = new Image(convCurent.participanti.get(0).getPozaPath());
-                            imageCurent.setImage(im);
-                            Image im2 = new Image(convCurent.participanti.get(1).getPozaPath());
-                            imageAltul.setImage(im2);
-                            updateConvo();
+                            incarcaConvo();
                         }
-                        notificare.setText(nouNotificare);
                     }
                 }
         );
     }
+
+    public void incarcaConvo() {
+            String nouNotificare = "You are chatting with ";
+            if (convCurent.participanti.get(0).getIDUtilizator() != contCurent.getIDUtilizator()) {
+                nouNotificare = nouNotificare + convCurent.participanti.get(0).getName();
+            } else nouNotificare = nouNotificare + convCurent.participanti.get(1).getName();
+            Image im = new Image(convCurent.participanti.get(0).getPozaPath());
+            imageCurent.setImage(im);
+            Image im2 = new Image(convCurent.participanti.get(1).getPozaPath());
+            imageAltul.setImage(im2);
+            updateConvo();
+         notificare.setText(nouNotificare);
+    }
+
     public void updateConvo()
     {
         mesajDisplay.getItems().clear();
@@ -142,57 +143,79 @@ public class MesajController {
             pst.setString(4, String.valueOf(ts));
             pst.executeUpdate();
             pst.close();
+            conn2.close();
         }
     }
 
-
-/*
     @FXML
-    private void creeazaLista() {
-        ObservableList<ConversatiePrivata> cp = FXCollections.observableArrayList();
-        for (ConversatiePrivata convo : contCurent.conversatii) cp.add(convo);
-        ListView<ConversatiePrivata> listView = new ListView<ConversatiePrivata>(cp);
-        listView.setCellFactory(new Callback<ListView<ConversatiePrivata>, ListCell<ConversatiePrivata>>() {
-            @Override
-            public ListCell<ConversatiePrivata> call(ListView<ConversatiePrivata> param) {
-                return new ListCell<ConversatiePrivata>() {
-                    @Override
-                    protected void updateItem(ConversatiePrivata convo, boolean empty) {
-                        super.updateItem(convo, empty);
-                        if (empty || convo == null) {
-                            setText(null);
-                        } else {
-                            String displayConvo = "";
-                            for (Cont c : convo.participanti)
-                            {
-                                if (c.getIDUtilizator() != contCurent.getIDUtilizator())
-                                    displayConvo = displayConvo + c.getUsername() + " ";
-                            }
-                            setText(displayConvo);
-                        }
-                    }
-                };
-            }
-        });
-        listView.setItems(cp);
-    }
-*/
-
-    /*
-    @FXML
-    public void handleConversatieList(MouseEvent event) throws IOException {
-        //temporar
-        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-            int index = conversatieList.getSelectionModel().getSelectedIndex();
-            System.out.println(index);
-            if (index >= 0) {
-                ConversatiePrivata cp = contCurent.conversatii.get(index);
-                for (Mesaj m: cp.mesaje)
-                {
-                    ObservableList<String> items = mesajDisplay.getItems();
-                    items.add(m.toString());
-                }
-            }
+    private void cautaPersoana(ActionEvent e) throws SQLException {
+        int nouConversatie=0;
+        String cautat = pCautat.getText();
+        String query = "SELECT * FROM Conturi WHERE Nume = ?"; //mai intai, cautam persoana si extragem datele pe care sunt strict necesare.
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, cautat);
+        ResultSet rs = pst.executeQuery();
+        int idCautat = 0;
+        if (rs.next()) {
+            idCautat = rs.getInt("IDUtilizator");
+            String poza = rs.getString("Poza");
         }
-    }*/
+        rs.close();
+        pst.close();
+        if (idCautat == 0) notificare.setText("We couldn't find this person in our records.");
+        else if (idCautat == contCurent.getIDUtilizator()) notificare.setText("Stop trying to talk to yourself.");
+        else {
+            Cont altul = Cont.lookupCont(idCautat);
+            String path =altul.getPozaPath();
+            imageAltul.setImage(new Image(path));
+            notificare.setText("You are chatting with " + altul.getName());
+            PreparedStatement pst2;
+            //acum verificam daca deja avem o conversatie cu ea
+            String query2 = "SELECT * FROM ConversatiiPrivateParticipanti WHERE IDConversatie IN (SELECT IDConversatie FROM ConversatiiPrivateParticipanti WHERE IDParticipant = ?) AND IDParticipant = ?";
+            pst2 = conn.prepareStatement(query2);
+            pst2.setString(1, String.valueOf(idCautat));
+            pst2.setString(2, String.valueOf(contCurent.getIDUtilizator()));
+            ResultSet rs2 = pst2.executeQuery();
+            if (rs2.next()) {
+                int idconv = rs2.getInt("IDConversatie");
+                convCurent = contCurent.lookupConversatie(idconv);
+                System.out.println(convCurent.IDConversatiePrivata);
+                if (convCurent != null) incarcaConvo();
+              }
+            else {
+                String query4 = "SELECT MAX(IDConversatie) FROM ConversatiiPrivateParticipanti";
+                Statement st = conn.createStatement();
+                ResultSet rs4 = st.executeQuery(query4);
+                nouConversatie = rs4.getInt(1);
+                rs4.close();
+                st.close();
+            }
+            pst2.close();
+            rs2.close();
+        }
+        conn.close();
+        if (nouConversatie != 0) //am facut separat ca sa nu am problema de blocaj ca este deschis SELECT in timp ce incerc INSERT
+        {
+            System.out.println(conn.isClosed());
+            //prima oara, trebuie sa creeze campuri pe IDConversatie in baza de date si Cont.conversatii in program
+            Connection conn2 = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+            String query3 = "INSERT INTO ConversatiiPrivateParticipanti (IDConversatie, IDParticipant) VALUES ((SELECT MAX(IDConversatie)+1 FROM ConversatiiPrivateParticipanti), ?), ((SELECT MAX(IDConversatie)+1 FROM ConversatiiPrivateParticipanti), ?)";
+            PreparedStatement ps3 = conn2.prepareStatement(query3);
+            ps3.setString(1, String.valueOf(idCautat));
+            ps3.setString(2, String.valueOf(contCurent.getIDUtilizator()));
+            ps3.executeUpdate();
+            ps3.close();
+            ArrayList<Cont> participanti = new ArrayList<>();
+            participanti.add(Cont.lookupCont(idCautat));
+            participanti.add(contCurent);
+            ArrayList <Mesaj> mesaje = new ArrayList<>();
+            ConversatiePrivata n = new ConversatiePrivata(nouConversatie, participanti, mesaje);
+            contCurent.conversatii.add(n);
+            convCurent = contCurent.conversatii.get(contCurent.conversatii.size()-1);
+            incarcaConvo();
+            conn2.close();
+        }
+    }
 }
+

@@ -41,6 +41,17 @@ public class Cont {
         }
 
     }
+    public ConversatiePrivata lookupConversatie(int convid)
+    {
+        for (ConversatiePrivata c : conversatii)
+        {
+            if (c.getIDConversatiePrivata() == convid)
+            {
+                return c;
+            }
+        }
+        return null;
+    }
     public Cont(int IDUtilizator, String name, String username, int nivel, String pozaPath) {
         this.IDUtilizator = IDUtilizator;
         this.name = name;

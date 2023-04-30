@@ -49,22 +49,23 @@ public class GroupController {
     private Grup grupCurent;
 
     @FXML
-    public void handleBack(ActionEvent event) throws IOException {
-        Parent loginParent = (Parent)FXMLLoader.load(this.getClass().getResource("maincont.fxml"));
-        Scene loginScene = new Scene(loginParent);
+    public void handleBack(ActionEvent event) throws IOException, SQLException {
+        FXMLLoader maincont = new FXMLLoader(Main.class.getResource("maincont.fxml"));
+        Scene scene = new Scene(maincont.load());
+        MainContController mcc = maincont.getController();
+        mcc.setContCurent(contCurent);
+        mcc.updateInfo();
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
-        window.setScene(loginScene);
+        window.setScene(scene);
         window.show();
     }
-
     public void setContGrup(Cont cc, Grup cg)
     {
         contCurent = cc;
         grupCurent = cg;
     }
 
-    public void updateInfo()
-    {
+    public void updateInfo() throws SQLException {
         groupName.setText(grupCurent.getNumeGrup());
         String s = "Goal: " + grupCurent.getScop();
         goalText.setText(s);
@@ -73,6 +74,7 @@ public class GroupController {
         String path = grupCurent.getPozaGrup();
         Image im = new Image(path);
         pozaprofil.setImage(im);
+        populeazaListaMembrii();
     }
 
     public void populeazaListaMembrii() throws SQLException {
@@ -81,13 +83,7 @@ public class GroupController {
         for (MembruGrup m : grupCurent.membri) items.add(m.getName());
     }
 
-    public void handleBack() throws IOException, SQLException {
-        FXMLLoader maincont = new FXMLLoader(Main.class.getResource("maincont.fxml"));
-        Scene groupScene = new Scene(maincont.load());
-        MainContController mcc = maincont.getController();
-        mcc.setContCurent(contCurent);
-        mcc.updateInfo();
-    }
+
 
     public void toSocial() throws IOException {
         FXMLLoader social = new FXMLLoader(Main.class.getResource("socialpage.fxml"));

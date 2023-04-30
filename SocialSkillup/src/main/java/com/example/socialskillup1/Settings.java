@@ -142,10 +142,11 @@ public class Settings {
 
     @FXML
     private void switchToMainCont(ActionEvent event) throws IOException {
-        Parent mainContParent = FXMLLoader.load(getClass().getResource("login.fxml"));
+        Parent mainContParent = FXMLLoader.load(getClass().getResource("maincont.fxml"));
         Scene mainContScene = new Scene(mainContParent);
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         currentStage.setScene(mainContScene);
+        currentStage.show();
     }
 
 }
