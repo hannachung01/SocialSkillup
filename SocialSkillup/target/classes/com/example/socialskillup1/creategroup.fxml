@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="500" prefWidth="320" spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.MainContController">
+   <AnchorPane prefHeight="139.0" prefWidth="320.0">
+      <children>
+      
+                <ImageView fx:id="pozaprofil" layoutX="40.0" layoutY="26.0">
+              <image>
+                  <Image url="https://via.placeholder.com/150x150" />
+              </image>
+              <fitHeight>100</fitHeight>
+              <fitWidth>100.0</fitWidth>
+              <preserveRatio>true</preserveRatio>
+          </ImageView>
+      
+                <Label fx:id="usernameLabel" layoutX="163.0" layoutY="98.0" text="Let's get a group started!" wrapText="true" />
+         <Button layoutX="169.0" layoutY="45.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="120.0" text="Set Group Picture" wrapText="true" />
+      </children>
+   </AnchorPane>
+   <AnchorPane prefHeight="342.0" prefWidth="320.0">
+      <children>
+      
+          <Label fx:id="levelLabel" layoutX="27.0" layoutY="9.0" text="Give it a name:" />
+         <TextField layoutX="125.0" layoutY="5.0" prefHeight="25.0" prefWidth="173.0" />
+         <Label fx:id="levelLabel1" layoutX="83.0" layoutY="36.0" prefHeight="40.0" prefWidth="154.0" text="Decide on a goal together." textAlignment="CENTER" />
+         <Label fx:id="levelLabel11" alignment="CENTER" layoutX="22.0" layoutY="56.0" prefHeight="40.0" prefWidth="277.0" text="(Tip: Pick something with a clear, verifiable end.)" textAlignment="CENTER" />
+         <TextField layoutX="14.0" layoutY="96.0" prefHeight="25.0" prefWidth="293.0" promptText="Be fluent enough in Spanish to pass the A2 test." />
+         <Label layoutX="21.0" layoutY="146.0" prefHeight="17.0" prefWidth="91.0" text="Pick an end date." />
+         <DatePicker layoutX="119.0" layoutY="142.0" prefHeight="25.0" prefWidth="188.0" promptText="When to check for success?" />
+         <Group layoutX="83.0" layoutY="200.0" />
+         <RadioButton layoutX="108.0" layoutY="187.0" mnemonicParsing="false" text="Competitive">
+            <toggleGroup>
+               <ToggleGroup fx:id="ToggleGroup1" />
+            </toggleGroup>
+         </RadioButton>
+         <RadioButton layoutX="202.0" layoutY="187.0" mnemonicParsing="false" selected="true" text="Cooperative" toggleGroup="$ToggleGroup1" />
+         <Label layoutX="30.0" layoutY="187.0" text="Group Type:" />
+         <Label layoutX="9.0" layoutY="223.0" text="What will your big reward be for accomplishing the goal?" />
+         <TextField layoutX="8.0" layoutY="252.0" prefHeight="25.0" prefWidth="303.0" promptText="A trip to Barcelona in the summer!" />
+           <Button layoutX="150.0" layoutY="301.0" onAction="#handleLogout" prefHeight="25.0" prefWidth="161.0" text="Back" />
+       <Button layoutX="10.0" layoutY="301.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="133.0" text="Start the Group!" />
+      </children>
+   </AnchorPane>
+
+</VBox>

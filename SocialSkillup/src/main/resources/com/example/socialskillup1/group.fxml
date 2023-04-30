@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="500" prefWidth="320" spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.MainContController">
+<VBox alignment="CENTER" prefHeight="500" prefWidth="320" spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.GroupController">
    <AnchorPane prefHeight="123.0" prefWidth="320.0">
       <children>
       
@@ -24,9 +24,9 @@
               <preserveRatio>true</preserveRatio>
           </ImageView>
       
-                            <Label fx:id="usernameLabel" layoutX="188.0" layoutY="21.0" text="Group Name" />
-         <Label layoutX="127.0" layoutY="47.0" prefHeight="40.0" prefWidth="182.0" text="Goal:" textAlignment="CENTER" wrapText="true" />
-         <Label layoutX="127.0" layoutY="85.0" prefHeight="17.0" prefWidth="167.0" text="By:" />
+                            <Label fx:id="groupName" layoutX="188.0" layoutY="21.0" text="Group Name" />
+         <Label fx:id="goalText" layoutX="132.0" layoutY="44.0" prefHeight="40.0" prefWidth="157.0" text="Goal:" textAlignment="CENTER" wrapText="true" />
+         <Label fx:id="deadlineText" layoutX="127.0" layoutY="85.0" prefHeight="17.0" prefWidth="150.0" text="By:" />
       </children>
    </AnchorPane>
    <Label text="What's New" />
@@ -47,7 +47,10 @@
              </TitledPane>
              <TitledPane animated="false" text="Members">
                <content>
-                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                           <ListView fx:id="listaMembri" prefHeight="74.0" prefWidth="320.0" />
+                        </children></AnchorPane>
                </content>
              </TitledPane>
              <TitledPane animated="false" prefHeight="143.0" prefWidth="320.0" text="Recent Group Posts" />
@@ -58,7 +61,7 @@
    <AnchorPane prefHeight="34.0" prefWidth="296.0">
       <children>
          <Button layoutX="112.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Social Page" />
-         <Button layoutX="214.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Back to Me" />
+         <Button layoutX="214.0" layoutY="5.0" mnemonicParsing="false" onAction="#handleBack" prefHeight="25.0" prefWidth="100.0" text="Back to Me" />
          <Button layoutX="8.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Progress Page" />
       </children>
    </AnchorPane>

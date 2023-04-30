@@ -81,7 +81,6 @@ public class MainController {
                 //ca sa trimita un obiect mai departe la celalalt controller
                 scene = new Scene(login.load());
                 MainContController mcc = login.getController();
-                System.out.println(contCurent);
                 mcc.setContCurent(contCurent);
                 mcc.updateInfo();
                 stage = (Stage)((Node)e.getSource()).getScene().getWindow();

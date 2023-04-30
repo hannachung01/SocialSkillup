@@ -154,14 +154,13 @@ public class Cont {
         }
     }
 
-    public void populeazaConversatii() throws SQLException {
+    public void populeazaConversatii() throws SQLException{
         conversatii = new ArrayList<>();
         String query = "SELECT * FROM ConversatiiPrivateParticipanti WHERE IDParticipant = ?";
         Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
         PreparedStatement pst = conn.prepareStatement(query);
         pst.setString(1, String.valueOf(IDUtilizator));
         ResultSet rs = pst.executeQuery(); //da o lista de conversatii
-        PreparedStatement pst3 = null;
         while (rs.next()) //parcurge prin fiecare conversatie
         {
             ConversatiePrivata cp;
@@ -171,17 +170,19 @@ public class Cont {
             PreparedStatement pst2 = conn.prepareStatement(query2);
             pst2.setString(1, String.valueOf(idconv));
             ResultSet rs2 = pst2.executeQuery();
-            while (rs2.next()) {
+            while (rs2.next())
+            {
                 int IDPart = rs2.getInt("IDParticipant");
                 Cont c = lookupCont(IDPart);
                 participanti.add(c);
             }
-            ArrayList<Mesaj> mesaje = new ArrayList<>();
+            ArrayList<Mesaj> mesaje =new ArrayList<>();
             String query3 = "SELECT * FROM MesajePrivate WHERE IDConversatie = ?";
-            pst3 = conn.prepareStatement(query3);
+            PreparedStatement pst3 = conn.prepareStatement(query3);
             pst3.setString(1, String.valueOf(idconv));
             ResultSet rs3 = pst3.executeQuery();
-            while (rs3.next()) {
+            while (rs3.next())
+            {
                 int senderID = rs3.getInt("SenderID");
                 String continut = rs3.getString("Continut");
                 LocalDateTime ts = LocalDateTime.parse(rs3.getString("Timestamp"));
@@ -190,13 +191,6 @@ public class Cont {
             }
             cp = new ConversatiePrivata(idconv, participanti, mesaje);
             conversatii.add(cp);
-            pst3.close();
-            rs3.close();
-            pst2.close();
-            rs2.close();
         }
-        rs.close();
-        pst.close();
-        conn.close();
     }
 }
