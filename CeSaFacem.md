@@ -1,8 +1,8 @@
 # SocialSkillup
 
 Vlad
-1. Poti sa te duci la mesajview si sa faci evenimente in care oricand dai click pe o conversatie, se muta la conversatie respectiva?
-2. Poti sa faci o pagina view pentru cautarea grupurilor sau a utilizatorilor?
+1. Poti sa adaugi o setare in care utilizatorul poate sa adauge o descriere? Am adaugat o coloana pentru descriere in baza de data si in Clasa Cont.
+2. Poti sa programezi functionalitati de cautare de prieteni si grupuri?
 
 Hanna
 1. Creeaza functionalitate pentru pagina de Grup.
