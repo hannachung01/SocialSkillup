@@ -197,7 +197,7 @@ public class Cont {
                 int senderID = rs3.getInt("SenderID");
                 String continut = rs3.getString("Continut");
                 LocalDateTime ts = LocalDateTime.parse(rs3.getString("Timestamp"));
-                Mesaj m = new Mesaj(1, continut, ts);
+                Mesaj m = new Mesaj(senderID, continut, ts);
                 mesaje.add(m);
             }
             cp = new ConversatiePrivata(idconv, participanti, mesaje);

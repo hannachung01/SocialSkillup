@@ -13,8 +13,9 @@ public class Mesaj {
         this.continut = continut;
         this.timestamp = timestamp;
     }
-    public String shortString()
-    {
+    public String shortString() throws SQLException {
+        String sendernume = Cont.lookupCont(senderID).getUsername();
+        /*
         String query = "SELECT * FROM Conturi WHERE IDUtilizator = ?";
         Connection conn = null;
         String sender = "";
@@ -34,9 +35,9 @@ public class Mesaj {
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
-        }
+        }*/
         String timp = timestamp.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-        String s = String.format("%s %s: ", timp, sender)+continut;
+        String s = String.format("%s %s: ", timp, sendernume)+continut;
         return s;
     }
 }
