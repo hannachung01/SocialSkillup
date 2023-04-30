@@ -57,20 +57,24 @@ public class MesajController {
         Image imC = new Image(contCurent.getPozaPath());
         imageCurent.setImage(imC);
         conversatieList.setOnMouseClicked(event -> {
-                    if(event.getClickCount() ==2)
-                    {
-                        int index = conversatieList.getSelectionModel().getSelectedIndex();
-                        String nouNotificare = notificare.getText();
-                        if (index >= 0) {
-                            convCurent = contCurent.conversatii.get(index);
-                            incarcaConvo();
-                        }
+            if(event.getClickCount() ==2)
+            {
+                int index = conversatieList.getSelectionModel().getSelectedIndex();
+                String nouNotificare = notificare.getText();
+                if (index >= 0) {
+                    convCurent = contCurent.conversatii.get(index);
+                    try {
+                        incarcaConvo();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
                     }
                 }
+            }
+        }
         );
     }
 
-    public void incarcaConvo() {
+    public void incarcaConvo() throws SQLException {
             String nouNotificare = "You are chatting with ";
             if (convCurent.participanti.get(0).getIDUtilizator() != contCurent.getIDUtilizator()) {
                 nouNotificare = nouNotificare + convCurent.participanti.get(0).getName();
@@ -83,8 +87,7 @@ public class MesajController {
          notificare.setText(nouNotificare);
     }
 
-    public void updateConvo()
-    {
+    public void updateConvo() throws SQLException {
         mesajDisplay.getItems().clear();
         for (Mesaj m : convCurent.mesaje) {
             ObservableList<String> items = mesajDisplay.getItems();
@@ -107,6 +110,7 @@ public class MesajController {
 
     @FXML
     private void populeazaListaConversatii() throws SQLException{
+        conversatieList.getItems().clear();
         ObservableList<String> items = conversatieList.getItems();
         contCurent.populeazaConversatii();
         for (ConversatiePrivata conversatie : contCurent.conversatii)
@@ -148,6 +152,20 @@ public class MesajController {
     }
 
     @FXML
+    public void handleConversatieList(MouseEvent event) throws IOException, SQLException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            String selectedItem = conversatieList.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                int i = conversatieList.getSelectionModel().getSelectedIndex();
+                int convID = contCurent.conversatii.get(i).getIDConversatiePrivata();
+                convCurent = contCurent.lookupConversatie(convID);
+                populeazaListaConversatii();
+            }
+        }
+    }
+
+
+    @FXML
     private void cautaPersoana(ActionEvent e) throws SQLException {
         int nouConversatie=0;
         String cautat = pCautat.getText();
@@ -180,7 +198,6 @@ public class MesajController {
             if (rs2.next()) {
                 int idconv = rs2.getInt("IDConversatie");
                 convCurent = contCurent.lookupConversatie(idconv);
-                System.out.println(convCurent.IDConversatiePrivata);
                 if (convCurent != null) incarcaConvo();
               }
             else {
@@ -197,8 +214,7 @@ public class MesajController {
         conn.close();
         if (nouConversatie != 0) //am facut separat ca sa nu am problema de blocaj ca este deschis SELECT in timp ce incerc INSERT
         {
-            System.out.println(conn.isClosed());
-            //prima oara, trebuie sa creeze campuri pe IDConversatie in baza de date si Cont.conversatii in program
+             //prima oara, trebuie sa creeze campuri pe IDConversatie in baza de date si Cont.conversatii in program
             Connection conn2 = DriverManager.getConnection("jdbc:sqlite:conturi.db");
             String query3 = "INSERT INTO ConversatiiPrivateParticipanti (IDConversatie, IDParticipant) VALUES ((SELECT MAX(IDConversatie)+1 FROM ConversatiiPrivateParticipanti), ?), ((SELECT MAX(IDConversatie)+1 FROM ConversatiiPrivateParticipanti), ?)";
             PreparedStatement ps3 = conn2.prepareStatement(query3);
@@ -213,7 +229,8 @@ public class MesajController {
             ConversatiePrivata n = new ConversatiePrivata(nouConversatie, participanti, mesaje);
             contCurent.conversatii.add(n);
             convCurent = contCurent.conversatii.get(contCurent.conversatii.size()-1);
-            incarcaConvo();
+            populeazaListaConversatii();
+            updateConvo();
             conn2.close();
         }
     }
