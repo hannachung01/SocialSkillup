@@ -184,7 +184,7 @@ public class MesajController {
         }
         rs.close();
         pst.close();
-        if (idCautat == 0) notificare.setText("We couldn't find this person in our records.");
+        if (idCautat == 0 || contCurent.ceRelatie(idCautat)==-1) notificare.setText("We couldn't find this person in our records.");
         else if (idCautat == contCurent.getIDUtilizator()) notificare.setText("Stop trying to talk to yourself.");
         else {
             Cont altul = Cont.lookupCont(idCautat);
