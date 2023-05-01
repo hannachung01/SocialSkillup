@@ -19,4 +19,12 @@ public class Mesaj {
         String s = String.format("%s %s: ", timp, sendernume)+continut;
         return s;
     }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
+    }
 }
