@@ -1,5 +1,6 @@
 package com.example.socialskillup1;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -7,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -16,8 +17,10 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
-import javafx.scene.control.Label;
+import static java.time.LocalDate.now;
 
 public class PersonSearchController {
     @FXML
@@ -32,7 +35,14 @@ public class PersonSearchController {
     private ImageView pozaProfil;
     @FXML
     private ListView friendList;
-
+    @FXML
+    private ChoiceBox<String> filtrare;
+    @FXML
+    private TextField cautaCuvinte;
+    @FXML
+    private CheckBox check;
+    @FXML
+    private ListView<String> rezultate;
     private Cont contCurent;
     private Grup grupCurent;
     private Cont contCautat;
@@ -42,7 +52,12 @@ public class PersonSearchController {
     }
 
     public void setContCautat(Cont cc) {contCautat = cc;}
+
+    public ArrayList<Cont> rez = new ArrayList<>(); //retin rezultatele pentru cautare ca sa pot sa postez detalii despre persoana
+
     public void paginaUpdate() throws SQLException {
+        filtrare.getItems().addAll("Username", "Name", "Description");
+        filtrare.setValue("Username");
         if (contCautat != null)
         {
             Name.setText(contCautat.getUsername());
@@ -64,6 +79,82 @@ public class PersonSearchController {
             items.add(c.getUsername());
         }
     }
+
+    @FXML
+    public void cautare(ActionEvent e) throws SQLException
+    {
+        ObservableList<String> items = rezultate.getItems();
+        items.clear();
+        String cautat = cautaCuvinte.getText();
+        LocalDateTime limita=LocalDateTime.now().minusWeeks(1);
+        String query;
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        if (!cautat.isBlank()) {
+            switch (filtrare.getSelectionModel().getSelectedIndex()) {
+                case 0:
+                    query = "SELECT * FROM Conturi WHERE Username = ?";
+                    break;
+                case 1:
+                    query = "SELECT * FROM Conturi WHERE Nume =?";
+                    break;
+                case 2:
+                    query = "SELECT * FROM Conturi"; // cautam folosind .contains in java, pentru ca momentan, SQL nu recunoaste % ca litere multiple
+                    break;
+                default:
+                    query = "SELECT * FROM Conturi";
+                    break;
+            }
+        }
+        else query = "SELECT * FROM Conturi";
+        PreparedStatement ps=conn.prepareStatement(query);
+        Statement s;
+        ResultSet rs1;
+        if (filtrare.getSelectionModel().getSelectedIndex()==0 || filtrare.getSelectionModel().getSelectedIndex()==1)
+        {
+            ps.setString(1, cautat);
+            rs1 = ps.executeQuery();
+        }
+        else
+        {
+            s=conn.createStatement();
+        }
+        while (rs1.next())  //acum filtru pentru timp daca este bifat
+        {
+            boolean exclus = false;
+            int id;
+            id = rs1.getInt("IDUtilizator");
+            Cont c = Cont.lookupCont(id);
+            if (check.isSelected()) {
+                if (c.conversatii != null) {
+                    int ultimulindex = c.conversatii.size() - 1;
+                    int IDultimaconversatie = c.conversatii.get(ultimulindex).getIDConversatiePrivata();
+                    ConversatiePrivata cp = c.lookupConversatie(IDultimaconversatie);
+                    LocalDateTime recentMesaj = cp.mesaje.get(cp.mesaje.size() - 1).getTimestamp();
+                    if (recentMesaj.compareTo(limita) < 0) exclus = true;
+                }
+            }
+            if (contCurent.ceRelatie(id) == -1) exclus = true; //verific daca este blocat
+            if (filtrare.getSelectionModel().getSelectedIndex() == 2) // verific daca este o parte de descriere
+            {
+                String des = rs1.getString("Descriere");
+                if (des.contains(cautat)) exclus = false; else exclus = true;
+                System.out.println("A gasit ceva?" + des.contains(cautat));
+                System.out.println("Exclus? " + exclus);
+            }
+            if (exclus != true && id != contCurent.getIDUtilizator()) {
+                rez.add(c);
+                System.out.println(c.getIDUtilizator());
+                System.out.println(exclus);
+                System.out.println(c.getName());
+                int i = rez.size() - 1;
+                items.add(rez.get(i).getUsername());
+            }
+        }
+            rs1.close();
+            ps.close();
+            conn.close();
+        }
+
     @FXML
     public void handleBlock(ActionEvent e) throws SQLException {
         int i = friendList.getSelectionModel().getSelectedIndex();
