@@ -49,9 +49,6 @@ public class PersonSearchController {
     private Button inviteButton;
     @FXML
     private Button blockButton;
-    private Button inviteButton;
-    @FXML
-    private Button blockButton;
     private Cont contCurent;
     private Cont contCautat;
     public void setContCurent(Cont cc)
@@ -123,10 +120,9 @@ public class PersonSearchController {
             blockButton.setDisable(false);
             blockButton.setText("Block");
 
-
             }
         }
-    }
+
 
     private void populeazaListaPrieteni() throws SQLException { //pune grupurile utilizatorului in ListView
         ObservableList<String> items = friendList.getItems();
@@ -226,17 +222,6 @@ public class PersonSearchController {
             conn.close();
         }
 
-        @FXML
-        public void handleRezultati(MouseEvent event) throws SQLException{
-            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
-                Object selectedItem = rezultate.getSelectionModel().getSelectedItem();
-                if (selectedItem != null) {
-                    int i = rezultate.getSelectionModel().getSelectedIndex();
-                    contCautat = rez.get(i);
-                    updateProfile();
-                }
-            }
-        }
     @FXML
     public void handlePending(MouseEvent event) throws SQLException{
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
@@ -300,7 +285,7 @@ public class PersonSearchController {
             String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
             r= st.executeUpdate(query2);
             st.executeUpdate(query1);
-            String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
+            query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
             st.executeUpdate(query2);
             st.close();
             conn.close();

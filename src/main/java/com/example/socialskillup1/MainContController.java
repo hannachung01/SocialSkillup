@@ -81,6 +81,7 @@ public class MainContController {
         populeazaListaPrieteni();
         contCurent.populeazaConversatii();
         populeazaListaConversatii();
+
     }
     @FXML
     private void populeazaListaGrupuri() throws SQLException { //pune grupurile utilizatorului in ListView
@@ -219,19 +220,19 @@ public class MainContController {
         Stage window = (Stage) ((Node) event.getSource()).getScene().getWindow();
         window.setScene(loginScene);
         window.show();
-    }
+
     @FXML
     private void switchToSettings(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
         Parent settingsParent = loader.load();
         Settings settingsController = loader.getController();
-        settingsController.setAccountInfo(contCurent);
-        String pozapath = contCurent.getPozaPath();
-        settingsController.setProfileImage(pozapath);
+        settingsController.setAccountInfo(contCurent, pozaprofil);
+        //settingsController.setProfileImage(pozaprofil);
         Scene settingsScene = new Scene(settingsParent);
 
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
         window.setScene(settingsScene);
         window.show();
     }
+
 }
