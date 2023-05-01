@@ -49,9 +49,10 @@ public class PersonSearchController {
     private Button inviteButton;
     @FXML
     private Button blockButton;
-
+    private Button inviteButton;
+    @FXML
+    private Button blockButton;
     private Cont contCurent;
-    private Grup grupCurent;
     private Cont contCautat;
     public void setContCurent(Cont cc)
     {
@@ -93,6 +94,7 @@ public class PersonSearchController {
             {
                 inviteButton.setDisable(true);
                 inviteButton.setText("Already Friends");
+
                 blockButton.setDisable(false);
                 blockButton.setText("Block");
             }
@@ -100,6 +102,10 @@ public class PersonSearchController {
             {
                 inviteButton.setDisable(true);
                 inviteButton.setText("Can't befriend blocked.");
+
+            }
+            else if (relatie ==-1)
+            {
                 blockButton.setDisable(true);
                 blockButton.setText("Already blocked");
             }
@@ -117,6 +123,8 @@ public class PersonSearchController {
             blockButton.setDisable(false);
             blockButton.setText("Block");
 
+
+            }
         }
     }
 
@@ -218,6 +226,17 @@ public class PersonSearchController {
             conn.close();
         }
 
+        @FXML
+        public void handleRezultati(MouseEvent event) throws SQLException{
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                Object selectedItem = rezultate.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    int i = rezultate.getSelectionModel().getSelectedIndex();
+                    contCautat = rez.get(i);
+                    updateProfile();
+                }
+            }
+        }
     @FXML
     public void handlePending(MouseEvent event) throws SQLException{
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
@@ -268,6 +287,7 @@ public class PersonSearchController {
         inviteButton.setText("Friend Invite Sent");
         Statement st = conn.createStatement();
         int r= st.executeUpdate(query1);
+        st.executeUpdate(query1);
         st.close();
         conn.close();
     }
@@ -279,6 +299,9 @@ public class PersonSearchController {
             int r= st.executeUpdate(query1);
             String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
             r= st.executeUpdate(query2);
+            st.executeUpdate(query1);
+            String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
+            st.executeUpdate(query2);
             st.close();
             conn.close();
             populeazaListaPrieteni();//cumva merge, dar este un exception thrown de tip argument mismatch... nu stiu de unde... dar programul continua sa ruleze bine
