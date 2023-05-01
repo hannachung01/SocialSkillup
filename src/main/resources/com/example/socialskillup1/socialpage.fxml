@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="500" prefWidth="320" spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.GrupSocialController">
+   <AnchorPane prefHeight="182.0" prefWidth="320.0">
+      <children>
+      
+                            <ImageView fx:id="pozaprofil" layoutX="14.0" layoutY="14.0">
+              <image>
+                  <Image url="https://via.placeholder.com/150x150" />
+              </image>
+              <fitHeight>100</fitHeight>
+              <fitWidth>100</fitWidth>
+              <preserveRatio>true</preserveRatio>
+          </ImageView>
+      
+                            <Label fx:id="groupName" layoutX="137.0" layoutY="23.0" text="Group Name Social Page" />
+         <Label fx:id="goalText" layoutX="127.0" layoutY="47.0" prefHeight="40.0" prefWidth="182.0" text="Goal:" textAlignment="CENTER" wrapText="true" />
+         <Label fx:id="deadlineText" layoutX="127.0" layoutY="85.0" prefHeight="17.0" prefWidth="167.0" text="By:" />
+         <Label alignment="CENTER" layoutX="127.0" layoutY="118.0" prefHeight="17.0" prefWidth="182.0" text="Who can we encourage today?" textAlignment="CENTER" />
+         <Button layoutX="14.0" layoutY="114.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Top Scorers" />
+      </children>
+   </AnchorPane>
+
+    <VBox prefHeight="312.0" prefWidth="320.0">
+      <children>
+         <Accordion prefHeight="237.0" prefWidth="320.0">
+           <panes>
+               <TitledPane animated="false" prefHeight="159.0" prefWidth="320.0" text="Members">
+                  <content>
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="111.0" prefWidth="318.0">
+                        <children>
+                           <ListView prefHeight="120.0" prefWidth="320.0" />
+                           <Button layoutX="188.0" layoutY="127.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Invite New Member" />
+                           <TextField layoutX="7.0" layoutY="127.0" prefHeight="25.0" prefWidth="173.0" />
+                        </children>
+                     </AnchorPane>
+                  </content>
+               </TitledPane>
+               <TitledPane animated="false" prefHeight="229.0" prefWidth="320.0" text="Group Messages">
+                  <content>
+                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="173.0" prefWidth="318.0">
+                        <children>
+                           <ListView prefHeight="113.0" prefWidth="320.0" />
+                           <Button layoutX="230.0" layoutY="123.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="84.0" text="Send" />
+                           <TextField layoutX="10.0" layoutY="123.0" prefHeight="25.0" prefWidth="213.0" />
+                        </children>
+                     </AnchorPane>
+                  </content>
+               </TitledPane>
+           </panes>
+         </Accordion>
+      </children>
+    </VBox>
+   <AnchorPane prefHeight="142.0" prefWidth="320.0">
+      <children>
+         <Label prefHeight="93.0" prefWidth="320.0" />
+         <Button layoutX="215.0" layoutY="32.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Encourage!" />
+         <TextField layoutX="14.0" layoutY="32.0" prefHeight="25.0" prefWidth="194.0" />
+         <Button layoutX="214.0" layoutY="63.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="91.0" text="Reflect" />
+         <TextField layoutX="13.0" layoutY="63.0" prefHeight="25.0" prefWidth="194.0" />
+         <Label alignment="CENTER" layoutX="64.0" layoutY="6.0" prefHeight="17.0" prefWidth="205.0" text="Weekly Check-in (for bonus points!)" />
+      </children>
+   </AnchorPane>
+   <AnchorPane prefHeight="34.0" prefWidth="296.0">
+      <children>
+         <Button layoutX="112.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Social Page" />
+         <Button layoutX="214.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Back to Me" />
+         <Button layoutX="8.0" layoutY="5.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Group Page" />
+      </children>
+   </AnchorPane>
+
+</VBox>
