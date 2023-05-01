@@ -69,7 +69,7 @@ public class MainContController {
     public void updateInfo() throws SQLException { //aici se incarca informatia personala despre contCurent
         String username = contCurent.getUsername();
         setUsername(username);
-        Image pozaprofil = new Image("profil1.png");
+        Image pozaprofil = new Image(contCurent.getPozaPath());
         getPozaprofil().setImage(pozaprofil);
         getLevelLabel().setText(String.valueOf(contCurent.getNivel()));
         contCurent.populeazaGrupuri(); //populeaza lista de grupuri la care apartin utilizatorul actual in cont
@@ -173,8 +173,8 @@ public class MainContController {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("settings.fxml"));
         Parent settingsParent = loader.load();
         Settings settingsController = loader.getController();
-        settingsController.setAccountInfo(contCurent);
-        settingsController.setProfileImage(pozaprofil);
+        settingsController.setAccountInfo(contCurent, pozaprofil);
+        //settingsController.setProfileImage(pozaprofil);
         Scene settingsScene = new Scene(settingsParent);
 
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();

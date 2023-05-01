@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="500.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.Settings">
-    <VBox alignment="CENTER" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+    <VBox alignment="CENTER" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Label text="Settings" />
 
-        <VBox spacing="5.0">
+        <VBox>
             <Label text="Change Username" />
             <TextField fx:id="usernameField" promptText="Enter new username" />
             <Label fx:id="userLabel" text="Label" visible="false" />
             <Button fx:id="saveUsernameButton" text="Save" />
         </VBox>
 
-        <VBox spacing="5.0">
+        <VBox>
             <Label text="Change Email" />
             <TextField fx:id="emailField" promptText="Enter new email" />
             <Label fx:id="emailLabel" text="Label" visible="false" />
             <Button fx:id="saveEmailButton" text="Save" />
         </VBox>
 
-        <VBox spacing="5.0">
+        <VBox>
             <Label text="Change Password" />
             <PasswordField fx:id="passwordField" accessibleRole="PASSWORD_FIELD" promptText="Enter new password" />
             <Label fx:id="passwordLabel" text="Label" visible="false" />
@@ -29,8 +30,9 @@
         </VBox>
 
         <VBox spacing="5.0">
+         <ImageView fx:id="pozaProfil" fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true" />
             <Label text="Change Profile Picture" />
-            <Button fx:id="uploadImageButton" text="Upload" />
+            <Button fx:id="setImageButton" text="Upload" />
             <Button mnemonicParsing="false" onAction="#switchToMainCont" text="Cancel" />
         </VBox>
     </VBox>
