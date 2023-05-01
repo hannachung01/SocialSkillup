@@ -173,6 +173,21 @@ public class Cont {
         return null;
     }
 
+    public int ceRelatie(int IDpers) throws SQLException {
+        String query = "SELECT EstePrieten FROM RELATII WHERE IDContPrincipal = ? AND IDContAltuia = ?"; //-1 blocat, 0 neutru, 1 prieteni, 2 cerere de prietenie
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        PreparedStatement pst = conn.prepareStatement(query);
+        pst.setString(1, String.valueOf(IDpers));
+        pst.setString(2, String.valueOf(IDUtilizator));
+        ResultSet rs = pst.executeQuery();
+        if (rs.next())
+        {
+            int r= rs.getInt("EstePrieten");
+            return r;
+        }
+        else return 0;
+    }
+
     public void populeazaConversatii() throws SQLException{
         conversatii = new ArrayList<>();
         String query = "SELECT * FROM ConversatiiPrivateParticipanti WHERE IDParticipant = ?";
@@ -182,6 +197,7 @@ public class Cont {
         ResultSet rs = pst.executeQuery(); //da o lista de conversatii
         while (rs.next()) //parcurge prin fiecare conversatie
         {
+            boolean esteblocat = false;
             ConversatiePrivata cp;
             ArrayList<Cont> participanti = new ArrayList<Cont>();
             int idconv = rs.getInt("IDConversatie");
@@ -192,24 +208,35 @@ public class Cont {
             while (rs2.next())
             {
                 int IDPart = rs2.getInt("IDParticipant");
-                Cont c = lookupCont(IDPart);
-                participanti.add(c);
+                if (ceRelatie(IDPart) != -1) {
+                    Cont c = lookupCont(IDPart);
+                    participanti.add(c);
+                }
+                else esteblocat=true;
             }
-            ArrayList<Mesaj> mesaje =new ArrayList<>();
-            String query3 = "SELECT * FROM MesajePrivate WHERE IDConversatie = ?";
-            PreparedStatement pst3 = conn.prepareStatement(query3);
-            pst3.setString(1, String.valueOf(idconv));
-            ResultSet rs3 = pst3.executeQuery();
-            while (rs3.next())
+            rs2.close();
+            pst2.close();
+            if (!esteblocat) //adauga conversatie daca nu este blocata.
             {
-                int senderID = rs3.getInt("SenderID");
-                String continut = rs3.getString("Continut");
-                LocalDateTime ts = LocalDateTime.parse(rs3.getString("Timestamp"));
-                Mesaj m = new Mesaj(1, continut, ts);
-                mesaje.add(m);
+                ArrayList<Mesaj> mesaje =new ArrayList<>();
+                String query3 = "SELECT * FROM MesajePrivate WHERE IDConversatie = ?";
+                PreparedStatement pst3 = conn.prepareStatement(query3);
+                pst3.setString(1, String.valueOf(idconv));
+                ResultSet rs3 = pst3.executeQuery();
+                while (rs3.next())
+                {
+                    int senderID = rs3.getInt("SenderID");
+                    String continut = rs3.getString("Continut");
+                    LocalDateTime ts = LocalDateTime.parse(rs3.getString("Timestamp"));
+                    Mesaj m = new Mesaj(1, continut, ts);
+                    mesaje.add(m);
+                }
+                cp = new ConversatiePrivata(idconv, participanti, mesaje);
+                conversatii.add(cp);
+                pst3.close();
+                rs.close();
             }
-            cp = new ConversatiePrivata(idconv, participanti, mesaje);
-            conversatii.add(cp);
         }
+        conn.close();
     }
 }
