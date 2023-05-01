@@ -44,11 +44,15 @@ public class PersonSearchController {
     @FXML
     private ListView<String> rezultate;
     @FXML
+    private ListView<String> pending;
+    @FXML
+    private Button inviteButton;
+    @FXML
+    private Button blockButton;
     private Button inviteButton;
     @FXML
     private Button blockButton;
     private Cont contCurent;
-    private Grup grupCurent;
     private Cont contCautat;
     public void setContCurent(Cont cc)
     {
@@ -58,12 +62,14 @@ public class PersonSearchController {
     public void setContCautat(Cont cc) {contCautat = cc;}
 
     public ArrayList<Cont> rez = new ArrayList<>(); //retin rezultatele pentru cautare ca sa pot sa postez detalii despre persoana
+    public ArrayList<Cont> cereri = new ArrayList<>(); //retin informatie despre cereri
 
     public void paginaUpdate() throws SQLException {
         filtrare.getItems().addAll("Username", "Name", "Description");
         filtrare.setValue("Username");
         updateProfile();
         populeazaListaPrieteni();
+        populeazaListPending();
 
     }
 
@@ -81,11 +87,22 @@ public class PersonSearchController {
             {
                 inviteButton.setDisable(true);
                 inviteButton.setText("Friend Invite Sent");
+                blockButton.setDisable(false);
+                blockButton.setText("Block");
             }
             else if (relatie == 1)
             {
                 inviteButton.setDisable(true);
                 inviteButton.setText("Already Friends");
+
+                blockButton.setDisable(false);
+                blockButton.setText("Block");
+            }
+            else if (relatie ==-1)
+            {
+                inviteButton.setDisable(true);
+                inviteButton.setText("Can't befriend blocked.");
+
             }
             else if (relatie ==-1)
             {
@@ -99,6 +116,16 @@ public class PersonSearchController {
 
             }
         }
+        else
+        {
+            inviteButton.setDisable(false);
+            inviteButton.setText("Send Friend Request");
+            blockButton.setDisable(false);
+            blockButton.setText("Block");
+
+
+            }
+        }
     }
 
     private void populeazaListaPrieteni() throws SQLException { //pune grupurile utilizatorului in ListView
@@ -107,6 +134,22 @@ public class PersonSearchController {
         contCurent.populeazaPrieteni();
         for (Cont c : contCurent.prieteni)
         {
+            items.add(c.getUsername());
+        }
+    }
+
+    private void populeazaListPending() throws SQLException {
+        cereri.clear();
+        ObservableList<String> items = pending.getItems();
+        items.clear();
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        String query = "SELECT * FROM Relatii WHERE ESTEPRIETEN = 2 AND IDCONTALTUIA = ?";
+        PreparedStatement pst =  conn.prepareStatement(query);
+        pst.setString(1, Integer.toString(contCurent.getIDUtilizator()));
+        ResultSet rs = pst.executeQuery();
+        while (rs.next()) {
+            Cont c = new Cont(rs);
+            cereri.add(c);
             items.add(c.getUsername());
         }
     }
@@ -195,6 +238,28 @@ public class PersonSearchController {
             }
         }
     @FXML
+    public void handlePending(MouseEvent event) throws SQLException{
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            Object selectedItem = pending.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {
+                int i = pending.getSelectionModel().getSelectedIndex();
+                contCautat = cereri.get(i);
+                updateProfile();
+            }
+        }
+    }
+        @FXML
+        public void handleRezultati(MouseEvent event) throws SQLException{
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                Object selectedItem = rezultate.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    int i = rezultate.getSelectionModel().getSelectedIndex();
+                    contCautat = rez.get(i);
+                    updateProfile();
+                }
+            }
+        }
+    @FXML
     public void handleBlock(ActionEvent e) throws SQLException {
         int i = friendList.getSelectionModel().getSelectedIndex();
         if (i >= 0)
@@ -203,9 +268,9 @@ public class PersonSearchController {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
             String query1= "UPDATE Relatii SET estePrieten = -1 WHERE (IDContPrincipal = "+contCurent.getIDUtilizator() + " AND IDContAltuia = " + contCautat.getIDUtilizator() + " AND estePrieten = 1);";
             Statement st = conn.createStatement();
-            st.executeUpdate(query1);
+            int r = st.executeUpdate(query1);
             String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
-            st.executeUpdate(query2);
+            r= st.executeUpdate(query2);
             st.close();
             conn.close();
             populeazaListaPrieteni();//cumva merge, dar este un exception thrown de tip argument mismatch... nu stiu de unde... dar programul continua sa ruleze bine
@@ -221,6 +286,7 @@ public class PersonSearchController {
         inviteButton.setDisable(true);
         inviteButton.setText("Friend Invite Sent");
         Statement st = conn.createStatement();
+        int r= st.executeUpdate(query1);
         st.executeUpdate(query1);
         st.close();
         conn.close();
@@ -230,6 +296,9 @@ public class PersonSearchController {
             Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
             String query1= "UPDATE Relatii SET estePrieten = -1 WHERE (IDContPrincipal = "+contCurent.getIDUtilizator() + " AND IDContAltuia = " + contCautat.getIDUtilizator() + " AND estePrieten = 1);";
             Statement st = conn.createStatement();
+            int r= st.executeUpdate(query1);
+            String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
+            r= st.executeUpdate(query2);
             st.executeUpdate(query1);
             String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
             st.executeUpdate(query2);
