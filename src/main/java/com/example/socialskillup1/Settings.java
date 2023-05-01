@@ -5,16 +5,18 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,14 +27,20 @@ public class Settings {
     @FXML
     private TextField usernameField, emailField;
     @FXML
-    private Button saveUsernameButton, savePasswordButton, saveEmailButton, cancelButton;
+    private Button saveUsernameButton, savePasswordButton, saveEmailButton, setImageButton, cancelButton;
     @FXML
     private Label userLabel, passwordLabel, emailLabel;
     @FXML
     private PasswordField passwordField;
+    @FXML
+    private ImageView pozaProfil;
 
-    public void setAccountInfo(Cont contCurent) {
+    Cont cont;
+
+    public void setAccountInfo(Cont contCurent, ImageView pozaprofil) {
         usernameField.setText(contCurent.getUsername());
+        cont=contCurent;
+
 
         saveUsernameButton.setOnAction(event -> {
             String newUsername = usernameField.getText();
@@ -72,7 +80,7 @@ public class Settings {
                 preparedStatement.setInt(2, contCurent.getIDUtilizator());
                 preparedStatement.executeUpdate();
 
-                contCurent.setEmail(newEmail);
+
                 emailLabel.setText("Email changed successfully!");
                 emailLabel.setTextFill(Color.GREEN);
                 emailLabel.setVisible(true);
@@ -105,7 +113,7 @@ public class Settings {
                 preparedStatement.setInt(2, contCurent.getIDUtilizator());
                 preparedStatement.executeUpdate();
 
-                contCurent.setPassword(newPassword);
+
                 passwordLabel.setText("Password changed successfully!");
                 passwordLabel.setTextFill(Color.GREEN);
                 passwordLabel.setVisible(true);
@@ -115,38 +123,52 @@ public class Settings {
             }
         });
 
-        /*cancelButton.setOnAction(event -> {
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("maincont.fxml"));
-                Parent root = loader.load();
+        setImageButton.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Select Image");
+            fileChooser.setInitialDirectory(new File("src/main/resources"));
+            // Filter
+            FileChooser.ExtensionFilter imageFilter = new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg");
+            fileChooser.getExtensionFilters().add(imageFilter);
 
-                MainContController mainContController = loader.getController();
+            File selectedFile = fileChooser.showOpenDialog(new Stage());
 
-                mainContController.setContCurent(contCurent);
+            if (selectedFile != null) {
+                String imagePath = selectedFile.toURI().toString();
+                try {
+                    Connection conn = DriverManager.getConnection("jdbc:sqlite:Conturi.db");
+                    String updateQuery = "UPDATE Conturi SET Poza = ? WHERE IDUtilizator = ?";
+                    PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
+                    preparedStatement.setString(1, imagePath);
+                    preparedStatement.setInt(2, cont.getIDUtilizator());
+                    preparedStatement.executeUpdate();
+                    conn.close();
 
-                Scene scene = new Scene(root);
-                Stage stage = (Stage) cancelButton.getScene().getWindow();
-                stage.setScene(scene);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                    cont.setPozaPath(imagePath);
+
+                    Image image = new Image(imagePath);
+                    pozaProfil.setImage(image);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
+        });
 
-        });*/
+
     }
 
-    public void setProfileImage(String pozaprofil) {
-    }
 
     @FXML
-    private void switchToMainCont(ActionEvent event) throws IOException {
-        Parent mainContParent = FXMLLoader.load(getClass().getResource("maincont.fxml"));
-        Scene mainContScene = new Scene(mainContParent);
-        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        currentStage.setScene(mainContScene);
-        currentStage.show();
+    private void switchToMainCont(ActionEvent e) throws IOException, SQLException {
+        FXMLLoader mainCont = new FXMLLoader(Main.class.getResource("maincont.fxml"));
+        Scene scene = new Scene(mainCont.load());
+        MainContController mcc = mainCont.getController();
+        mcc.setContCurent(cont);
+        mcc.updateInfo();
+        Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
 }
+
