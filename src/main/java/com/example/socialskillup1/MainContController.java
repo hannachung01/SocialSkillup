@@ -153,6 +153,25 @@ public class MainContController {
     }
 
     @FXML
+    public void handleFriendList(MouseEvent event) throws IOException, SQLException {
+        if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+            String selectedItem = prietenList.getSelectionModel().getSelectedItem();
+            if (selectedItem != null) {//trei linii sa afle ce grup este de fapt selectat pentru ca listview este doar string-uri :((
+                int i = prietenList.getSelectionModel().getSelectedIndex();
+                Cont contCautat = contCurent.prieteni.get(i);
+                FXMLLoader personMain = new FXMLLoader(Main.class.getResource("personsearch.fxml"));
+                Scene personScene = new Scene(personMain.load());
+                PersonSearchController psc = personMain.getController();
+                psc.setContCurent(contCurent);
+                psc.setContCautat(contCautat);
+                psc.paginaUpdate();
+                Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+                window.setScene(personScene);
+                window.show();
+            }
+        }
+    }
+    @FXML
     public void handleGroupList(MouseEvent event) throws IOException, SQLException {
         if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
             String selectedItem = groupList.getSelectionModel().getSelectedItem();

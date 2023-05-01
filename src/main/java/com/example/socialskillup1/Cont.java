@@ -59,6 +59,7 @@ public class Cont {
         this.pozaPath = rs.getString("Poza");
         this.password = rs.getString("Parola");
         this.email = rs.getString("Email");
+        this.descriere = rs.getString("Descriere");
     }
 
     public Cont() {

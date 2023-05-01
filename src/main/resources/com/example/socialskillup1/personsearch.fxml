@@ -17,33 +17,32 @@
    <children>
       <AnchorPane prefHeight="103.0" prefWidth="253.0">
          <children>
-            <ImageView fx:id="pozaProfil" fitHeight="88.0" fitWidth="110.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="pozaProfil" fitHeight="88.0" fitWidth="110.0" layoutX="34.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true" />
             <Label fx:id="Name" alignment="CENTER" layoutX="138.0" layoutY="3.0" prefHeight="25.0" prefWidth="154.0" textAlignment="CENTER" wrapText="true" />
-            <Label fx:id="descriereLabel" alignment="CENTER" layoutX="138.0" layoutY="46.0" prefHeight="56.0" prefWidth="154.0" text="Search for a person and say hello!" textAlignment="CENTER" wrapText="true" />
+            <Label fx:id="descriereLabel" alignment="CENTER" layoutX="151.0" layoutY="46.0" prefHeight="56.0" prefWidth="141.0" text="Search for a person and say hello!" textAlignment="CENTER" wrapText="true" />
             <Label fx:id="nivelLabel" alignment="CENTER" layoutX="138.0" layoutY="28.0" prefHeight="25.0" prefWidth="154.0" textAlignment="CENTER" wrapText="true" />
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="28.0" prefWidth="295.0">
          <children>
-            <Button layoutX="162.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="128.0" text="Send Friend Request" />
-            <Button layoutX="14.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="45.0" text="Block" />
-            <Button layoutX="67.0" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="More About..." />
+            <Button fx:id="inviteButton" layoutX="162.0" layoutY="2.0" mnemonicParsing="false" onAction="#trimiteInvite" prefHeight="25.0" prefWidth="128.0" text="Send Friend Request" />
+            <Button fx:id="blockButton" layoutX="27.0" layoutY="2.0" mnemonicParsing="false" onAction="#handleBlockOnProfile" onMouseClicked="#handleBlockOnProfile" prefHeight="25.0" prefWidth="128.0" text="Block" />
          </children>
       </AnchorPane>
+    <TitledPane animated="false" prefHeight="158.0" prefWidth="309.0" text="My Friends">
+      <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="197.0" prefWidth="300.0">
+               <children>
+                  <ListView fx:id="friendList" layoutX="14.0" layoutY="-2.0" onMouseClicked="#handleFriendList" prefHeight="152.0" prefWidth="285.0" />
+                  <Button layoutX="117.0" layoutY="156.0" mnemonicParsing="false" onAction="#handleDelete" prefHeight="25.0" prefWidth="88.0" text="Delete" />
+                  <Button layoutX="211.0" layoutY="156.0" mnemonicParsing="false" onAction="#handleBlock" onMouseClicked="#handleBlock" prefHeight="25.0" prefWidth="82.0" text="Block" />
+                  <Button layoutX="18.0" layoutY="156.0" mnemonicParsing="false" onAction="#mesajPrieten" prefHeight="25.0" prefWidth="92.0" text="Message" />
+               </children>
+            </AnchorPane>
+      </content>
+    </TitledPane>
       <Accordion prefHeight="258.0" prefWidth="322.0">
         <panes>
-          <TitledPane animated="false" prefHeight="158.0" prefWidth="309.0" text="My Friends">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="197.0" prefWidth="300.0">
-                     <children>
-                        <ListView fx:id="friendList" layoutX="14.0" layoutY="-2.0" onMouseClicked="#handleFriendList" prefHeight="152.0" prefWidth="285.0" />
-                        <Button layoutX="117.0" layoutY="156.0" mnemonicParsing="false" onAction="#handleDelete" prefHeight="25.0" prefWidth="88.0" text="Delete" />
-                        <Button layoutX="211.0" layoutY="156.0" mnemonicParsing="false" onAction="#handleBlock" onMouseClicked="#handleBlock" prefHeight="25.0" prefWidth="82.0" text="Block" />
-                        <Button layoutX="18.0" layoutY="156.0" mnemonicParsing="false" onAction="#mesajPrieten" prefHeight="25.0" prefWidth="92.0" text="Message" />
-                     </children>
-                  </AnchorPane>
-            </content>
-          </TitledPane>
             <TitledPane animated="false" prefHeight="223.0" prefWidth="258.0" text="Pending Friend Invites">
                <content>
                   <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="197.0" prefWidth="296.0">
@@ -63,7 +62,7 @@
                         <Button fx:id="cautare" layoutX="183.0" layoutY="42.0" mnemonicParsing="false" onAction="#cautare" prefHeight="25.0" prefWidth="100.0" text="Search" />
                         <TextField fx:id="cautaCuvinte" layoutX="20.0" layoutY="42.0" promptText="Type words to search." />
                         <ChoiceBox fx:id="filtrare" layoutX="139.0" layoutY="6.0" prefHeight="25.0" prefWidth="144.0" />
-                        <ListView layoutX="20.0" layoutY="110.0" prefHeight="72.0" prefWidth="267.0" />
+                        <ListView fx:id="rezultate" layoutX="20.0" layoutY="101.0" onMouseClicked="#handleRezultati" prefHeight="72.0" prefWidth="267.0" />
                         <CheckBox fx:id="check" layoutX="81.0" layoutY="84.0" mnemonicParsing="false" text="Activity in the last week" />
                      </children>
                   </AnchorPane>

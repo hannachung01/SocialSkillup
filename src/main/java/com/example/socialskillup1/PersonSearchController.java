@@ -43,6 +43,10 @@ public class PersonSearchController {
     private CheckBox check;
     @FXML
     private ListView<String> rezultate;
+    @FXML
+    private Button inviteButton;
+    @FXML
+    private Button blockButton;
     private Cont contCurent;
     private Grup grupCurent;
     private Cont contCautat;
@@ -58,16 +62,43 @@ public class PersonSearchController {
     public void paginaUpdate() throws SQLException {
         filtrare.getItems().addAll("Username", "Name", "Description");
         filtrare.setValue("Username");
+        updateProfile();
+        populeazaListaPrieteni();
+
+    }
+
+    public void updateProfile() throws SQLException {
+
         if (contCautat != null)
         {
             Name.setText(contCautat.getUsername());
-            nivelLabel.setText("Nivel: " + Integer.toString((int)(contCautat.getXP()/100)+1));
+            nivelLabel.setText("Nivel: " + Integer.toString(((int)(contCautat.getXP())/100+1)));
             descriereLabel.setText(contCautat.getDescriere());
             Image im = new Image(contCautat.getPozaPath());
             pozaProfil.setImage(im);
-        }
-        populeazaListaPrieteni();
+            int relatie = contCurent.ceRelatie(contCautat.getIDUtilizator());
+            if (relatie == 2)
+            {
+                inviteButton.setDisable(true);
+                inviteButton.setText("Friend Invite Sent");
+            }
+            else if (relatie == 1)
+            {
+                inviteButton.setDisable(true);
+                inviteButton.setText("Already Friends");
+            }
+            else if (relatie ==-1)
+            {
+                blockButton.setDisable(true);
+                blockButton.setText("Already blocked");
+            }
+            else
+            {
+                inviteButton.setDisable(false);
+                inviteButton.setText("Send Friend Request");
 
+            }
+        }
     }
 
     private void populeazaListaPrieteni() throws SQLException { //pune grupurile utilizatorului in ListView
@@ -117,6 +148,7 @@ public class PersonSearchController {
         else
         {
             s=conn.createStatement();
+            rs1=s.executeQuery(query);
         }
         while (rs1.next())  //acum filtru pentru timp daca este bifat
         {
@@ -138,14 +170,10 @@ public class PersonSearchController {
             {
                 String des = rs1.getString("Descriere");
                 if (des.contains(cautat)) exclus = false; else exclus = true;
-                System.out.println("A gasit ceva?" + des.contains(cautat));
-                System.out.println("Exclus? " + exclus);
-            }
+
+              }
             if (exclus != true && id != contCurent.getIDUtilizator()) {
                 rez.add(c);
-                System.out.println(c.getIDUtilizator());
-                System.out.println(exclus);
-                System.out.println(c.getName());
                 int i = rez.size() - 1;
                 items.add(rez.get(i).getUsername());
             }
@@ -155,6 +183,17 @@ public class PersonSearchController {
             conn.close();
         }
 
+        @FXML
+        public void handleRezultati(MouseEvent event) throws SQLException{
+            if (event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                Object selectedItem = rezultate.getSelectionModel().getSelectedItem();
+                if (selectedItem != null) {
+                    int i = rezultate.getSelectionModel().getSelectedIndex();
+                    contCautat = rez.get(i);
+                    updateProfile();
+                }
+            }
+        }
     @FXML
     public void handleBlock(ActionEvent e) throws SQLException {
         int i = friendList.getSelectionModel().getSelectedIndex();
@@ -170,8 +209,35 @@ public class PersonSearchController {
             st.close();
             conn.close();
             populeazaListaPrieteni();//cumva merge, dar este un exception thrown de tip argument mismatch... nu stiu de unde... dar programul continua sa ruleze bine
+            updateProfile();
         }
     }
+
+    @FXML
+    public void trimiteInvite(ActionEvent e) throws SQLException
+    {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+        String query1= "UPDATE Relatii SET estePrieten = 2 WHERE (IDContPrincipal = "+contCurent.getIDUtilizator() + " AND IDContAltuia = " + contCautat.getIDUtilizator();
+        inviteButton.setDisable(true);
+        inviteButton.setText("Friend Invite Sent");
+        Statement st = conn.createStatement();
+        st.executeUpdate(query1);
+        st.close();
+        conn.close();
+    }
+    @FXML
+    public void handleBlockOnProfile(ActionEvent e) throws SQLException {
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:conturi.db");
+            String query1= "UPDATE Relatii SET estePrieten = -1 WHERE (IDContPrincipal = "+contCurent.getIDUtilizator() + " AND IDContAltuia = " + contCautat.getIDUtilizator() + " AND estePrieten = 1);";
+            Statement st = conn.createStatement();
+            st.executeUpdate(query1);
+            String query2= "UPDATE Relatii SET estePrieten = 0 WHERE (IDContPrincipal = "+contCautat.getIDUtilizator() + " AND IDContAltuia = " + contCurent.getIDUtilizator() + " AND estePrieten = 1);";
+            st.executeUpdate(query2);
+            st.close();
+            conn.close();
+            populeazaListaPrieteni();//cumva merge, dar este un exception thrown de tip argument mismatch... nu stiu de unde... dar programul continua sa ruleze bine
+            updateProfile();
+        }
     @FXML
     public void handleDelete(ActionEvent e) throws SQLException {
         int i = friendList.getSelectionModel().getSelectedIndex();
@@ -197,11 +263,7 @@ public class PersonSearchController {
             if (selectedItem != null) {
                 int i = friendList.getSelectionModel().getSelectedIndex();
                 contCautat = contCurent.prieteni.get(i);
-                Name.setText(contCautat.getUsername());
-                nivelLabel.setText("Nivel: " + Integer.toString(((int)(contCautat.getXP())/100+1)));
-                descriereLabel.setText(contCautat.getDescriere());
-                Image im = new Image(contCautat.getPozaPath());
-                pozaProfil.setImage(im);
+                updateProfile();
             }
         }
     }
