@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="320" spacing="10" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.socialskillup1.GrosupSearchController">
+   <children>
+      <Accordion prefHeight="163.0" prefWidth="320.0">
+        <panes>
+          <TitledPane animated="false" prefHeight="101.0" prefWidth="320.0" text="My Groups">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ListView layoutY="-5.0" prefHeight="145.0" prefWidth="320.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+            <TitledPane animated="false" prefHeight="126.0" prefWidth="320.0" text="Pending Group Invites">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="165.0" prefWidth="318.0">
+                     <children>
+                        <ListView layoutX="-1.0" prefHeight="47.0" prefWidth="320.0" />
+                        <Button layoutX="159.0" layoutY="46.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="Decline" />
+                        <Button layoutX="236.0" layoutY="46.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="74.0" text="Accept" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </TitledPane>
+        </panes>
+      </Accordion>
+      <AnchorPane prefHeight="183.0" prefWidth="320.0">
+         <children>
+            <Label layoutX="21.0" layoutY="10.0" text="Look for a group by..." />
+            <CheckBox layoutX="21.0" layoutY="56.0" mnemonicParsing="false" text="Friend is a Member" />
+            <Button layoutX="183.0" layoutY="118.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Search" />
+            <TextField layoutX="20.0" layoutY="118.0" />
+            <ChoiceBox layoutX="139.0" layoutY="6.0" prefWidth="150.0" />
+            <ListView layoutX="20.0" layoutY="152.0" prefHeight="79.0" prefWidth="280.0" />
+            <CheckBox layoutX="21.0" layoutY="75.0" mnemonicParsing="false" text="Competitive" />
+            <CheckBox layoutX="21.0" layoutY="94.0" mnemonicParsing="false" text="Cooperative" />
+            <ComboBox layoutX="157.0" layoutY="60.0" prefHeight="25.0" prefWidth="65.0" promptText="Min" />
+            <ComboBox layoutX="225.0" layoutY="60.0" prefHeight="25.0" prefWidth="65.0" promptText="Max" />
+            <CheckBox layoutX="163.0" layoutY="93.0" mnemonicParsing="false" text="Activity in last week" />
+            <Label layoutX="170.0" layoutY="39.0" text="Number of Members" />
+         </children>
+      </AnchorPane>
+      <AnchorPane prefHeight="73.0" prefWidth="320.0">
+         <children>
+            <ImageView fitHeight="88.0" fitWidth="117.0" layoutX="14.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" />
+            <Label layoutX="149.0" layoutY="5.0" prefHeight="59.0" prefWidth="166.0" text="Search for a group." />
+            <Button layoutX="170.0" layoutY="64.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="136.0" text="Send Group Request" />
+         </children>
+      </AnchorPane>
+      <HBox alignment="CENTER">
+         <children>
+            <Button prefHeight="25.0" prefWidth="65.0" text="Back" />
+            <Button fx:id="settingsButton" onAction="#switchToSettings" text="Settings" />
+            <Button onAction="#handleLogout" text="Logout" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
